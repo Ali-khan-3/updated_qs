@@ -188,7 +188,8 @@ em { font-style: italic; }
 .preloader__mark { display: flex; flex-direction: column; align-items: center; line-height: 1; }
 .preloader__qs { font-family: var(--f-display); font-weight: 400; font-size: clamp(4rem, 8vw, 5.75rem); letter-spacing: -0.06em; }
 .preloader__realty { font-family: var(--f-mark); font-size: clamp(1.15rem, 2.2vw, 1.6rem); letter-spacing: 0.04em; margin-top: 0.4em; text-shadow: 0 0 18px rgba(255, 255, 255, 0.45); }
-.preloader__count { position: absolute; right: var(--gutter); bottom: var(--gutter); font-family: var(--f-display); font-size: clamp(3rem, 8vw, 7rem); font-weight: 300; line-height: 1; }
+.preloader__count span { display: inline-block; }
+.preloader__count { overflow: hidden; position: absolute; right: var(--gutter); bottom: var(--gutter); font-family: var(--f-display); font-size: clamp(3rem, 8vw, 7rem); font-weight: 300; line-height: 1; }
 .preloader__tag { position: absolute; left: var(--gutter); bottom: calc(var(--gutter) + 0.5rem); font-size: var(--fs-xs); letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.75; }
 .no-js .preloader, .no-motion .preloader { display: none; }
 

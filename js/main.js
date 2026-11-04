@@ -42,7 +42,6 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
     lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add((time) => lenis.raf(time * 1000));
-    gsap.ticker.lagSmoothing(0);
   }
 
   setupMenu(lenis);
@@ -64,31 +63,55 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
   document.body.classList.add("is-loading");
   lenis && lenis.stop();
 
-  const counter = { v: 0 };
   const countEl = $(".js-count");
-  const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
+  const COUNT_STEPS = [50, 75, 100];
+  // Paused until the page has loaded: while images and fonts are still decoding the
+  // main thread stalls, and the count would jump ahead instead of ticking through.
+  const intro = gsap.timeline({ paused: true, defaults: { ease: "expo.out" } });
+  const COUNT_DURATION = 3.6; // seconds for the 50 → 75 → 100 count
+  const exit = COUNT_DURATION + 0.2; // preloader starts leaving just after the count lands
 
   intro
-    .to(".preloader__frame rect", { strokeDashoffset: 0, duration: 1.8, ease: "power2.inOut" }, 0)
+    .to(".preloader__frame rect", { strokeDashoffset: 0, duration: COUNT_DURATION, ease: "power1.inOut" }, 0)
     .from(".preloader__qs", { yPercent: 40, autoAlpha: 0, duration: 1.4 }, 0.2)
     .from(".preloader__realty", { y: 16, autoAlpha: 0, duration: 1.2 }, 0.6)
     .from(".preloader__tag", { autoAlpha: 0, duration: 1 }, 0.6)
-    .to(counter, {
-      v: 100, duration: 2.1, ease: "power2.inOut",
-      onUpdate: () => (countEl.textContent = String(Math.round(counter.v)).padStart(3, "0")),
-    }, 0)
-    .to(".preloader__inner, .preloader__count, .preloader__tag", { autoAlpha: 0, y: -30, duration: 0.6, ease: "power2.in" }, 2.3)
-    .to(preloader, { yPercent: -100, duration: 1.2, ease: "expo.inOut" }, 2.6)
-    .to(".hero__img", { scale: 1, duration: 2.4, ease: "expo.out" }, 2.75)
-    .to(".hero__title .line > span", { yPercent: 0, duration: 1.6, stagger: 0.12 }, 3.0)
-    .to(".hero__top, .hero__bottom", { autoAlpha: 1, y: 0, duration: 1.2, stagger: 0.1 }, 3.4)
-    .to(".header", { autoAlpha: 1, y: 0, duration: 1.2 }, 3.5)
+    .to(".preloader__inner, .preloader__count, .preloader__tag", { autoAlpha: 0, y: -30, duration: 0.6, ease: "power2.in" }, exit)
+    .to(preloader, { yPercent: -100, duration: 1.2, ease: "expo.inOut" }, exit + 0.3)
+    .to(".hero__img", { scale: 1, duration: 2.4, ease: "expo.out" }, exit + 0.45)
+    .to(".hero__title .line > span", { yPercent: 0, duration: 1.6, stagger: 0.12 }, exit + 0.7)
+    .to(".hero__top, .hero__bottom", { autoAlpha: 1, y: 0, duration: 1.2, stagger: 0.1 }, exit + 1.1)
+    .to(".header", { autoAlpha: 1, y: 0, duration: 1.2 }, exit + 1.2)
     .add(() => {
       preloader.style.display = "none";
       document.body.classList.remove("is-loading");
       lenis && lenis.start();
+      // default lag smoothing protects the intro from frame hitches; scrolling feels better without it
+      gsap.ticker.lagSmoothing(0);
       ScrollTrigger.refresh();
-    }, 3.6);
+    }, exit + 1.3);
+
+  // count in three steps — 50, 75, 100 — each rolling up into place
+  const stepGap = COUNT_DURATION / COUNT_STEPS.length;
+  countEl.textContent = COUNT_STEPS[0];
+  intro.fromTo(countEl, { yPercent: 100, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.6, immediateRender: true }, 0.2);
+  COUNT_STEPS.slice(1).forEach((n, i) => {
+    const at = 0.2 + stepGap * (i + 1);
+    intro
+      .to(countEl, { yPercent: -100, autoAlpha: 0, duration: 0.35, ease: "power2.in" }, at - 0.35)
+      .call(() => (countEl.textContent = n), null, at)
+      .fromTo(countEl, { yPercent: 100, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.6, immediateRender: false }, at);
+  });
+
+  const pageLoaded = new Promise((resolve) =>
+    document.readyState === "complete" ? resolve() : window.addEventListener("load", resolve, { once: true })
+  );
+  const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+  const giveUp = new Promise((resolve) => setTimeout(resolve, 5000)); // slow connections still get the intro
+  Promise.race([Promise.all([pageLoaded, fontsReady]), giveUp]).then(() => {
+    // one extra frame so the first tick doesn't absorb the last of the load work
+    requestAnimationFrame(() => intro.play());
+  });
 
   /* =========================================================
      PINNED HORIZONTAL LIFECYCLE — created first so later
