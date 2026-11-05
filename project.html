@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <script>document.documentElement.classList.remove("no-js");</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Development Ventures — QS Realty</title>
+  <meta name="description" content="A QS Realty development venture in Mumbai — delivered under one roof, from feasibility and approvals to construction and turnkey handover." />
+  <meta name="theme-color" content="#737e66" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="page-project">
+
+  <canvas class="cursor-trail" aria-hidden="true" hidden></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="page-wipe is-covering" aria-hidden="true"></div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="header">
+    <a href="index.html" class="brand" aria-label="QS Realty — home" data-transition>
+      <span class="brand__box"><span class="brand__qs">QS</span><span class="brand__realty">Realty</span></span>
+    </a>
+    <nav class="header__nav" aria-label="Primary">
+      <a href="index.html#about" class="nav-link" data-transition>About</a>
+      <a href="index.html#team" class="nav-link" data-transition>Team</a>
+      <a href="index.html#services" class="nav-link" data-transition>Expertise</a>
+      <a href="index.html#projects" class="nav-link" data-transition>Projects</a>
+      <a href="index.html#footprint" class="nav-link" data-transition>Footprint</a>
+    </nav>
+    <div class="header__actions">
+      <a href="index.html#contact" class="btn btn--pill btn--light" data-magnetic data-transition><span>Let's talk</span></a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ FULLSCREEN MENU ============ -->
+  <div class="menu" id="menu" aria-hidden="true">
+    <div class="menu__bg"></div>
+    <div class="menu__inner">
+      <ol class="menu__list">
+        <li><a href="index.html#about" data-transition><i>01</i><span>About</span></a></li>
+        <li><a href="index.html#team" data-transition><i>02</i><span>Team</span></a></li>
+        <li><a href="index.html#services" data-transition><i>03</i><span>Expertise</span></a></li>
+        <li><a href="index.html#projects" data-transition><i>04</i><span>Projects</span></a></li>
+        <li><a href="index.html#philosophy" data-transition><i>05</i><span>Vision</span></a></li>
+        <li><a href="index.html#footprint" data-transition><i>06</i><span>Footprint</span></a></li>
+        <li><a href="index.html#contact" data-transition><i>07</i><span>Contact</span></a></li>
+      </ol>
+      <div class="menu__aside">
+        <p class="eyebrow">Main Office</p>
+        <p>Shop No. 1, Ground Floor, Nawaz Manzil,<br />Off. BKC Road, L.B.S Marg,<br />Kurla (W), Mumbai — 400 070</p>
+        <p class="eyebrow">Get in touch</p>
+        <p><a href="tel:+918888141899">+91 8888 141 899</a><br /><a href="tel:+919820299042">+91 9820 299 042</a><br /><a href="mailto:qsrealty@outlook.com">qsrealty@outlook.com</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- rendered from js/projects-data.js -->
+  <main id="project-root"></main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" data-cursor-dark>
+    <div class="container">
+      <div class="footer__top">
+        <p class="footer__tag">The Best At<br /><em>What We Build.</em></p>
+        <nav class="footer__nav" aria-label="Footer">
+          <a href="index.html#about" class="link-u" data-transition>About</a>
+          <a href="index.html#services" class="link-u" data-transition>Expertise</a>
+          <a href="index.html#projects" class="link-u" data-transition>Projects</a>
+          <a href="index.html#footprint" class="link-u" data-transition>Footprint</a>
+          <a href="index.html#team" class="link-u" data-transition>Team</a>
+          <a href="index.html#contact" class="link-u" data-transition>Contact</a>
+        </nav>
+        <div class="footer__contact">
+          <a href="tel:+918888141899" class="link-u">+91 8888 141 899</a>
+          <a href="mailto:qsrealty@outlook.com" class="link-u">qsrealty@outlook.com</a>
+          <a href="https://www.qsrealty.in" class="link-u">www.qsrealty.in</a>
+        </div>
+      </div>
+      <p class="footer__word" aria-hidden="true"><span>QS</span> Realty</p>
+      <div class="footer__bottom">
+        <p>© <span class="js-year">2026</span> QS Realty. All rights reserved.</p>
+        <p>Kurla (W), Mumbai</p>
+        <a href="#top" class="link-u js-top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/projects-data.js"></script>
+  <script src="js/projects-render.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

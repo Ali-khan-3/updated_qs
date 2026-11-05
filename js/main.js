@@ -23,9 +23,13 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
   /* ---------- forms work regardless of motion ---------- */
   setupForm();
   setupFootprint();
+  setupEthos();
+  setupNavCurrent();
 
   if (!hasGsap || reduceMotion) {
     root.classList.add("no-motion");
+    const wipeEl = $(".page-wipe");
+    if (wipeEl) wipeEl.classList.remove("is-covering");
     setupMenu(null);
     setupHeader();
     $$(".js-counter").forEach((el) => (el.textContent = formatNumber(+el.dataset.to, el.dataset.format)));
@@ -33,6 +37,8 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
   }
 
   gsap.registerPlugin(ScrollTrigger);
+  // the same script runs on the home page and on project pages, so some targets won't exist
+  gsap.config({ nullTargetWarn: false });
 
   /* =========================================================
      SMOOTH SCROLL
@@ -57,12 +63,70 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
   gsap.set(".hero__img", { scale: 1.3 });
 
   /* =========================================================
-     PRELOADER
+     PAGE ENTRY
+     The full preloader plays once per visit on the home page.
+     Project pages, and returning to the home page, get a quick
+     wipe reveal instead.
      ========================================================= */
   const preloader = $(".preloader");
+  const wipe = $(".page-wipe");
   document.body.classList.add("is-loading");
   lenis && lenis.stop();
 
+  const onEntryDone = () => {
+    document.body.classList.remove("is-loading");
+    lenis && lenis.start();
+    // default lag smoothing protects the intro from frame hitches; scrolling feels better without it
+    gsap.ticker.lagSmoothing(0);
+    ScrollTrigger.refresh();
+    scrollToHash(lenis);
+    // Back / reload can restore the scroll position while the entry is still running, so
+    // fade-ins that are already on screen miss their trigger — reveal those right away.
+    requestAnimationFrame(() => {
+      $$(".reveal-up").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.92 && +getComputedStyle(el).opacity < 0.99) {
+          gsap.to(el, { y: 0, autoAlpha: 1, duration: 1.2, ease: "expo.out", overwrite: true });
+        }
+      });
+    });
+  };
+
+  const pageLoaded = new Promise((resolve) =>
+    document.readyState === "complete" ? resolve() : window.addEventListener("load", resolve, { once: true })
+  );
+  const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+  const whenReady = (fn, maxWait) =>
+    Promise.race([Promise.all([pageLoaded, fontsReady]), new Promise((r) => setTimeout(r, maxWait))])
+      // one extra frame so the first tick doesn't absorb the last of the load work
+      .then(() => requestAnimationFrame(fn));
+
+  let introSeen = false;
+  try { introSeen = sessionStorage.getItem("qs-intro") === "1"; } catch (e) { /* storage blocked */ }
+
+  if (preloader && !introSeen) {
+    try { sessionStorage.setItem("qs-intro", "1"); } catch (e) { /* storage blocked */ }
+    playPreloader();
+  } else {
+    if (preloader) preloader.style.display = "none";
+    gsap.set(wipe, { autoAlpha: 1, yPercent: 0 });
+    wipe.classList.remove("is-covering");
+    const entry = gsap.timeline({ paused: true, defaults: { ease: "expo.out" } })
+      .to(wipe, { yPercent: -100, duration: 1, ease: "expo.inOut" }, 0)
+      .set(wipe, { autoAlpha: 0 })
+      .to(".hero__img", { scale: 1, duration: 2 }, 0.2)
+      .to(".hero__title .line > span", { yPercent: 0, duration: 1.4, stagger: 0.1 }, 0.35)
+      .to(".hero__top, .hero__bottom", { autoAlpha: 1, y: 0, duration: 1.1, stagger: 0.1 }, 0.6)
+      .from(".pj-hero__title .line > span", { yPercent: 110, duration: 1.4 }, 0.35)
+      .from(".pj-back, .pj-hero .eyebrow, .pj-hero__facts", { autoAlpha: 0, y: 20, duration: 1, stagger: 0.08 }, 0.5)
+      .to(".header", { autoAlpha: 1, y: 0, duration: 1 }, 0.5)
+      .add(onEntryDone, 0.8);
+    whenReady(() => entry.play(), 2500);
+  }
+
+  setupTransitions(wipe, lenis);
+
+  function playPreloader() {
   const countEl = $(".js-count");
   const COUNT_STEPS = [50, 75, 100];
   // Paused until the page has loaded: while images and fonts are still decoding the
@@ -84,11 +148,7 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
     .to(".header", { autoAlpha: 1, y: 0, duration: 1.2 }, exit + 1.2)
     .add(() => {
       preloader.style.display = "none";
-      document.body.classList.remove("is-loading");
-      lenis && lenis.start();
-      // default lag smoothing protects the intro from frame hitches; scrolling feels better without it
-      gsap.ticker.lagSmoothing(0);
-      ScrollTrigger.refresh();
+      onEntryDone();
     }, exit + 1.3);
 
   // count in three steps — 50, 75, 100 — each rolling up into place
@@ -103,15 +163,8 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
       .fromTo(countEl, { yPercent: 100, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.6, immediateRender: false }, at);
   });
 
-  const pageLoaded = new Promise((resolve) =>
-    document.readyState === "complete" ? resolve() : window.addEventListener("load", resolve, { once: true })
-  );
-  const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
-  const giveUp = new Promise((resolve) => setTimeout(resolve, 5000)); // slow connections still get the intro
-  Promise.race([Promise.all([pageLoaded, fontsReady]), giveUp]).then(() => {
-    // one extra frame so the first tick doesn't absorb the last of the load work
-    requestAnimationFrame(() => intro.play());
-  });
+  whenReady(() => intro.play(), 5000); // slow connections still get the intro
+  }
 
   /* =========================================================
      PINNED HORIZONTAL LIFECYCLE — created first so later
@@ -119,16 +172,58 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
      ========================================================= */
   const mm = gsap.matchMedia();
   mm.add("(min-width: 900px)", () => {
+    const pin = $(".services__pin");
+    if (!pin) return; // home page only
+    const intro = $(".services__intro");
     const track = $(".services__track");
-    const distance = () => track.scrollWidth - window.innerWidth;
-    const st = { trigger: ".services__pin", start: "top top", end: () => "+=" + distance(), invalidateOnRefresh: true };
+    const cards = $$(".phase", track);
+    const last = cards[cards.length - 1];
+    const lastMedia = $(".phase__media", last);
+    const finale = $(".services__finale");
+    const PEEK = 18; // px of each earlier card left showing behind the one on top
 
-    gsap.to(track, { x: () => -distance(), ease: "none", scrollTrigger: { ...st, pin: true, scrub: 1, anticipatePin: 1 } });
-    gsap.to(".services__progress span", { scaleX: 1, ease: "none", scrollTrigger: { ...st, scrub: true } });
-    gsap.to(".services__intro", {
-      autoAlpha: 0, ease: "none",
-      scrollTrigger: { trigger: ".services__pin", start: "top top", end: () => "+=" + window.innerWidth * 0.35, scrub: true },
+    // Deck of cards: the row slides left and each card parks over the heading as it
+    // arrives, PEEK px to the right of the one before, so the stack builds up like a
+    // fanned hand of cards. Card i travels `travel(i)` px and then stops.
+    // The row stops as soon as the Turnkey card is fully on screen (same margin on the right
+    // as the deck has on the left). Cards already stacked stay stacked, the rest hold their
+    // place in the row, and the Turnkey card opens up to full screen from there.
+    const deckLeft = () => intro.offsetLeft + parseFloat(getComputedStyle(intro).paddingLeft); // where the heading text starts
+    const stackTravel = (i) => track.offsetLeft + cards[i].offsetLeft - (deckLeft() + i * PEEK);
+    const rowStop = () => track.offsetLeft + last.offsetLeft + last.offsetWidth - (pin.offsetWidth - deckLeft());
+    const travel = (i) => Math.min(stackTravel(i), rowStop());
+    const deckEnd = travel(cards.length - 1);
+
+    // where the Turnkey image sits once the row stops — the finale opens up from exactly there
+    const finaleStart = () => {
+      const left = track.offsetLeft + last.offsetLeft + lastMedia.offsetLeft - travel(cards.length - 1);
+      const top = track.offsetTop + last.offsetTop + lastMedia.offsetTop;
+      const right = pin.offsetWidth - left - lastMedia.offsetWidth;
+      const bottom = pin.offsetHeight - top - lastMedia.offsetHeight;
+      return `inset(${top}px ${right}px ${bottom}px ${left}px round 14px)`;
+    };
+
+    // timeline units are 1000 scroll-px, so every card moves at the same speed and
+    // the row stays together until each card reaches its place in the deck
+    const tl = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: {
+        trigger: pin, start: "top top", end: () => "+=" + (travel(cards.length - 1) + window.innerHeight * 1.6),
+        pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true,
+      },
     });
+    cards.forEach((card, i) => tl.to(card, { x: () => -travel(i), duration: travel(i) / 1000 }, 0));
+    // the deck takes the heading's place; fade the heading and copy as the first card arrives so
+    // nothing peeks out around the stack (the "(03) Our expertise" label stays)
+    const firstLanding = travel(0) / 1000;
+    tl.to([".services__intro .h2", ".services__lede", ".services__hint"], { autoAlpha: 0, duration: firstLanding * 0.4 }, firstLanding * 0.6);
+    tl.to(".services__progress span", { scaleX: 1, duration: deckEnd / 1000 }, 0)
+      .set(finale, { autoAlpha: 1 }, deckEnd / 1000)
+      .fromTo(finale, { clipPath: () => finaleStart() }, { clipPath: "inset(0px 0px 0px 0px round 0px)", duration: 1, ease: "power2.inOut" })
+      .fromTo(".services__finale > img", { scale: 1.12 }, { scale: 1, duration: 1, ease: "power2.out" }, "<")
+      .from(".services__finale-copy > *", { y: 40, autoAlpha: 0, duration: 0.4, stagger: 0.08, ease: "power2.out" }, "-=0.3")
+      .to({}, { duration: 0.5 }); // hold the full-screen frame for a beat before scrolling on
+
     gsap.from(".services__intro .line > span", {
       yPercent: 110, duration: 1.4, ease: "expo.out", stagger: 0.1,
       scrollTrigger: { trigger: ".services", start: "top 70%" },
@@ -201,16 +296,6 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
     scrollTrigger: { trigger: ".partner", start: "top bottom", end: "bottom top", scrub: true },
   });
 
-  gsap.fromTo(".philosophy__media img", { scale: 1.15 }, {
-    scale: 1, ease: "none",
-    scrollTrigger: { trigger: ".philosophy", start: "top bottom", end: "bottom bottom", scrub: true },
-  });
-
-  // value rows
-  gsap.from(".value", {
-    y: 40, autoAlpha: 0, duration: 1.2, ease: "expo.out", stagger: 0.08,
-    scrollTrigger: { trigger: ".values__list", start: "top 80%" },
-  });
 
   // map pins drop in
   // opacity only — the pins' own transform attribute holds their map position
@@ -256,11 +341,27 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
   });
 
   /* =========================================================
-     CURSOR + MAGNETIC
+     CURSOR TRAIL + MAGNETIC
      ========================================================= */
-  if (finePointer) setupCursor();
+  if (finePointer) {
+    setupMagnetic();
+    setupCursorTrail();
+  }
 
   window.addEventListener("load", () => ScrollTrigger.refresh());
+
+  // Recalculate trigger positions whenever the page height changes (late-loading
+  // images, font swaps, live CSS edits) — otherwise the pinned lifecycle section
+  // can pin at a stale position and overlap the sections above it.
+  let lastHeight = document.body.scrollHeight;
+  let refreshTimer;
+  new ResizeObserver(() => {
+    const h = document.body.scrollHeight;
+    if (Math.abs(h - lastHeight) < 2) return;
+    lastHeight = h;
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 150);
+  }).observe(document.body);
 
   /* =========================================================
      HELPERS
@@ -287,36 +388,85 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
     walk(el);
   }
 
-  function setupCursor() {
-    const cursor = $(".cursor");
-    const label = $(".cursor__label");
-    const xTo = gsap.quickTo(cursor, "x", { duration: 0.45, ease: "power3" });
-    const yTo = gsap.quickTo(cursor, "y", { duration: 0.45, ease: "power3" });
-    let lastX = 0, lastY = 0;
+  // Ribbon trail behind the normal pointer — same recipe as belgradearbor.rs: 10 spring
+  // chains of 10 nodes drawn as 1px gold curves with additive blending on a fixed,
+  // click-through canvas. Desktop only (≥1121px), and it waits for the first mouse move.
+  function setupCursorTrail() {
+    const canvas = document.querySelector(".cursor-trail");
+    if (!canvas) return;
+    const wide = window.matchMedia("(min-width: 1121px)");
+    const ctx = canvas.getContext("2d");
+    const CFG = { trails: 10, size: 10, friction: 0.5, dampening: 0.1, tension: 0.98 };
+    const STROKE = "hsla(34.19, 34.96%, 48.24%, 0.2)";
+    const mouse = { x: 0, y: 0 };
+    let trails = [];
+    let running = false;
+    let started = false;
 
-    const updateTone = () => {
-      const under = document.elementFromPoint(lastX, lastY);
-      cursor.classList.toggle("is-on-dark", !!(under && under.closest("[data-cursor-dark], .header, .menu")));
+    const makeTrail = (spring) => ({
+      spring: spring + 0.1 * Math.random() - 0.02,
+      friction: CFG.friction + 0.01 * Math.random() - 0.002,
+      nodes: Array.from({ length: CFG.size }, () => ({ x: mouse.x, y: mouse.y, vx: 0, vy: 0 })),
+    });
+
+    const update = (t) => {
+      let spring = t.spring;
+      const head = t.nodes[0];
+      head.vx += (mouse.x - head.x) * spring;
+      head.vy += (mouse.y - head.y) * spring;
+      t.nodes.forEach((n, i) => {
+        if (i > 0) {
+          const prev = t.nodes[i - 1];
+          n.vx += (prev.x - n.x) * spring + prev.vx * CFG.dampening;
+          n.vy += (prev.y - n.y) * spring + prev.vy * CFG.dampening;
+        }
+        n.vx *= t.friction; n.vy *= t.friction;
+        n.x += n.vx; n.y += n.vy;
+        spring *= CFG.tension;
+      });
     };
 
-    window.addEventListener("mousemove", (e) => {
-      lastX = e.clientX; lastY = e.clientY;
-      xTo(lastX); yTo(lastY);
-      cursor.style.opacity = 1;
-      updateTone();
-    });
-    window.addEventListener("scroll", updateTone, { passive: true });
-    document.addEventListener("mouseleave", () => (cursor.style.opacity = 0));
+    const draw = (t) => {
+      const n = t.nodes;
+      ctx.beginPath();
+      ctx.moveTo(n[0].x, n[0].y);
+      let i = 1;
+      for (; i < n.length - 2; i++) ctx.quadraticCurveTo(n[i].x, n[i].y, (n[i].x + n[i + 1].x) / 2, (n[i].y + n[i + 1].y) / 2);
+      ctx.quadraticCurveTo(n[i].x, n[i].y, n[i + 1].x, n[i + 1].y);
+      ctx.stroke();
+    };
 
-    $$("a, button, .chips label, .footprint__areas li").forEach((el) => {
-      el.addEventListener("mouseenter", () => cursor.classList.add("is-hover"));
-      el.addEventListener("mouseleave", () => cursor.classList.remove("is-hover"));
-    });
-    $$("[data-cursor]").forEach((el) => {
-      el.addEventListener("mouseenter", () => { label.textContent = el.dataset.cursor; cursor.classList.add("is-label"); });
-      el.addEventListener("mouseleave", () => cursor.classList.remove("is-label"));
-    });
+    const frame = () => {
+      if (!running) return;
+      ctx.globalCompositeOperation = "source-over";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.strokeStyle = STROKE;
+      ctx.lineWidth = 1;
+      trails.forEach((t) => { update(t); draw(t); });
+      requestAnimationFrame(frame);
+    };
 
+    const resize = () => { canvas.width = document.documentElement.clientWidth; canvas.height = window.innerHeight; };
+    const onMove = (e) => {
+      mouse.x = e.clientX; mouse.y = e.clientY;
+      if (!started) { // first move: spawn the chains at the pointer, then start drawing
+        started = true;
+        trails = Array.from({ length: CFG.trails }, (_, i) => makeTrail(0.4 + (i / CFG.trails) * 0.025));
+        start();
+      }
+    };
+    const start = () => { if (!running && started && wide.matches) { running = true; canvas.hidden = false; requestAnimationFrame(frame); } };
+    const stop = () => { running = false; ctx.clearRect(0, 0, canvas.width, canvas.height); };
+
+    resize();
+    window.addEventListener("resize", resize);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
+    wide.addEventListener("change", () => { if (wide.matches) start(); else { stop(); canvas.hidden = true; } });
+  }
+
+  function setupMagnetic() {
     $$("[data-magnetic]").forEach((el) => {
       const mx = gsap.quickTo(el, "x", { duration: 0.6, ease: "elastic.out(1, 0.4)" });
       const my = gsap.quickTo(el, "y", { duration: 0.6, ease: "elastic.out(1, 0.4)" });
@@ -385,6 +535,84 @@ function setupAnchors(lenis) {
   });
 }
 
+// After arriving from another page with a #section in the URL, land on that section
+// once pins and spacers are in place (the browser's own jump happens too early).
+function scrollToHash(lenis) {
+  if (!location.hash || location.hash === "#top") return;
+  const target = document.querySelector(location.hash);
+  if (!target) return;
+  if (lenis) lenis.scrollTo(target, { immediate: true });
+  else target.scrollIntoView();
+}
+
+// Links marked data-transition to another page: cover the screen with the sage wipe,
+// then navigate. The next page reveals itself by wiping the panel away.
+function setupTransitions(wipe, lenis) {
+  if (!wipe) return;
+  document.querySelectorAll("a[data-transition]").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      const url = new URL(a.href, location.href);
+      // same page + hash: just scroll there
+      if (url.pathname === location.pathname && url.search === location.search && url.hash) {
+        const target = url.hash === "#top" ? 0 : document.querySelector(url.hash);
+        if (target === null) return;
+        e.preventDefault();
+        document.body.classList.remove("menu-open");
+        if (lenis) lenis.scrollTo(target, { duration: 1.6 });
+        else if (target === 0) window.scrollTo(0, 0);
+        else target.scrollIntoView();
+        return;
+      }
+      e.preventDefault();
+      gsap.fromTo(wipe, { autoAlpha: 1, yPercent: 100 }, {
+        yPercent: 0, duration: 0.7, ease: "expo.inOut",
+        onComplete: () => (location.href = url.href),
+      });
+    });
+  });
+  // coming back via the browser's Back button restores the page with the wipe still covering it
+  window.addEventListener("pageshow", (e) => { if (e.persisted) gsap.set(wipe, { autoAlpha: 0 }); });
+}
+
+// Header nav: underline the link whose section is crossing the middle of the screen.
+// Home page only — on project pages the links point to another page.
+function setupNavCurrent() {
+  const links = Array.from(document.querySelectorAll('.header__nav a[href^="#"]'));
+  const sections = links.map((a) => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+  if (!sections.length) return;
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const mid = window.innerHeight / 2;
+    const current = sections.find((s) => { const r = s.getBoundingClientRect(); return r.top <= mid && r.bottom >= mid; });
+    links.forEach((a) => a.classList.toggle("is-current", !!current && a.getAttribute("href") === "#" + current.id));
+  };
+  window.addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+}
+
+// Core values: whichever value crosses the middle of the screen becomes active, and the
+// sticky frame crossfades to its image. Hover does the same on desktop.
+function setupEthos() {
+  const values = Array.from(document.querySelectorAll(".ethos__value"));
+  const imgs = Array.from(document.querySelectorAll(".ethos__img"));
+  const num = document.querySelector(".js-ethos-num");
+  if (!values.length) return;
+  const activate = (i) => {
+    values.forEach((v, k) => v.classList.toggle("is-active", k === i));
+    imgs.forEach((im, k) => im.classList.toggle("is-active", k === i));
+    if (num) num.textContent = String(i + 1).padStart(2, "0");
+  };
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) activate(values.indexOf(e.target)); });
+  }, { rootMargin: "-48% 0px -48% 0px" });
+  values.forEach((v, i) => {
+    io.observe(v);
+    v.addEventListener("mouseenter", () => activate(i));
+  });
+}
+
 function setupFootprint() {
   const items = document.querySelectorAll(".footprint__areas li");
   const pins = document.querySelectorAll(".pin");
@@ -398,46 +626,107 @@ function setupFootprint() {
   });
 }
 
+// Tabbed contact form: each tab shows its own fields, swaps the intro copy and the photo
+// on the left, and builds its own WhatsApp / email message.
 function setupForm() {
   const form = document.getElementById("enquiry");
   if (!form) return;
   const note = form.querySelector(".form__note");
+  const panel = form.closest(".contact__panel-inner");
+  const done = panel.querySelector(".cform__done");
+  const intro = panel.querySelector(".cform__intro");
+  const tabs = Array.from(panel.querySelectorAll(".ctabs__tab"));
+  const pill = panel.querySelector(".ctabs__pill");
+  const imgs = Array.from(document.querySelectorAll(".contact__img"));
+  const tabField = form.querySelector('[name="tab"]');
+
+  const TABS = {
+    enquiry: { label: "Project enquiry", submit: "Send on WhatsApp", heading: "Tell us about your project.", sub: "Share a few details and our team will come back with a clear next step." },
+    callback: { label: "Callback request", submit: "Request a callback", heading: "Prefer to talk it through?", sub: "Leave your number and a good time — a project head will call you back." },
+    visit: { label: "Site visit request", submit: "Book a site visit", heading: "Let's walk the site together.", sub: "Tell us where and when — we'll confirm the visit on WhatsApp." },
+  };
+
+  const setTab = (key) => {
+    tabField.value = key;
+    tabs.forEach((t, i) => {
+      const on = t.dataset.tab === key;
+      t.classList.toggle("is-active", on);
+      t.setAttribute("aria-selected", on);
+      if (on) pill.style.transform = `translateX(${i * 100}%)`;
+    });
+    imgs.forEach((im) => im.classList.toggle("is-active", im.dataset.tab === key));
+    // show only this tab's fields; hidden fields are disabled so they stay out of the message
+    form.querySelectorAll("[data-for]").forEach((el) => {
+      const on = el.dataset.for.split(" ").includes(key);
+      el.hidden = !on;
+      el.querySelectorAll("input, textarea").forEach((inp) => (inp.disabled = !on));
+    });
+    intro.querySelector('[data-copy="heading"]').textContent = TABS[key].heading;
+    intro.querySelector('[data-copy="sub"]').textContent = TABS[key].sub;
+    intro.classList.remove("is-swapping"); void intro.offsetWidth; intro.classList.add("is-swapping");
+    form.querySelector(".cform__submit-label").textContent = TABS[key].submit;
+    note.textContent = "";
+  };
+  tabs.forEach((t) => t.addEventListener("click", () => {
+    done.hidden = true; form.hidden = false; intro.hidden = false;
+    setTab(t.dataset.tab);
+  }));
+  setTab("enquiry");
 
   const collect = () => {
     const data = new FormData(form);
-    const name = (data.get("name") || "").trim();
-    const phone = (data.get("phone") || "").trim();
+    const val = (k) => (data.get(k) || "").trim();
+    const name = val("name");
+    const phone = val("phone");
+    const consent = form.querySelector('[name="consent"]');
     let ok = true;
     [["name", name.length > 1], ["phone", /^[+\d][\d\s-]{7,}$/.test(phone)]].forEach(([field, valid]) => {
       form.querySelector(`[name="${field}"]`).parentElement.classList.toggle("is-invalid", !valid);
       if (!valid) ok = false;
     });
+    consent.closest(".consent").classList.toggle("is-invalid", !consent.checked);
     if (!ok) { note.textContent = "Please add your name and a valid phone number."; return null; }
+    if (!consent.checked) { note.textContent = "Please tick the box so we can contact you."; return null; }
     note.textContent = "";
+
+    const tab = val("tab");
     const lines = [
       "Hello QS Realty,",
       "",
+      `Request: ${TABS[tab].label}`,
       `Name: ${name}`,
       `Phone: ${phone}`,
-      data.get("email") ? `Email: ${data.get("email")}` : null,
-      `Interested in: ${data.get("type")}`,
-      data.get("message") ? `\n${data.get("message")}` : null,
-    ].filter((l) => l !== null);
-    return { name, type: data.get("type"), text: lines.join("\n") };
+      val("email") && `Email: ${val("email")}`,
+      tab === "enquiry" && `Interested in: ${val("type")}`,
+      tab === "callback" && `Best time to call: ${val("time")}`,
+      val("site") && `Site: ${val("site")}`,
+      val("date") && `Preferred date: ${val("date")}`,
+      val("message") && `\n${val("message")}`,
+    ].filter((l) => l !== false && l !== "");
+    return { name, label: TABS[tab].label, text: lines.join("\n") };
   };
+
+  const showDone = () => { form.hidden = true; intro.hidden = true; done.hidden = false; };
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const msg = collect();
     if (!msg) return;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg.text)}`, "_blank", "noopener");
-    note.textContent = "Opening WhatsApp — we usually reply within a working day.";
+    showDone();
   });
 
   form.querySelector(".js-mail").addEventListener("click", () => {
     const msg = collect();
     if (!msg) return;
-    const subject = `Project enquiry — ${msg.type} — ${msg.name}`;
+    const subject = `${msg.label} — ${msg.name}`;
     window.location.href = `mailto:${ENQUIRY_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(msg.text)}`;
+    showDone();
+  });
+
+  done.querySelector(".js-again").addEventListener("click", () => {
+    form.reset();
+    done.hidden = true; form.hidden = false; intro.hidden = false;
+    setTab(tabField.value || "enquiry");
   });
 }
