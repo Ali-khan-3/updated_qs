@@ -230,12 +230,12 @@ em { font-style: italic; }
   background: transparent;
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
   display: flex; align-items: center; justify-content: space-between; gap: var(--s-3);
-  padding: var(--s-2) var(--gutter);
+  padding: 0.55rem var(--gutter);
   color: var(--bone);
   transition: transform 0.6s var(--ease-out), background-color 0.5s, color 0.5s, padding 0.5s;
 }
 .page-project .header { background: var(--sage); }
-.header.is-scrolled { background: var(--sage); padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.header.is-scrolled { background: var(--sage); }
 .header.is-hidden { transform: translateY(-110%); }
 
 .brand__box {
@@ -245,6 +245,7 @@ em { font-style: italic; }
 }
 .brand:hover .brand__box { background: rgba(227, 214, 196, 0.12); }
 .brand__qs { font-family: var(--f-display); font-size: 1.75rem; letter-spacing: -0.06em; font-weight: 400; }
+.header .brand__logo { width: 2.65rem; height: 2.25rem; }
 .brand__realty { font-family: var(--f-mark); font-size: max(0.62rem, 10px); letter-spacing: 0.08em; margin-top: 0.15rem; }
 
 .header__nav { display: none; gap: var(--s-4); font-size: var(--fs-sm); letter-spacing: 0.06em; }

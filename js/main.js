@@ -170,8 +170,9 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
   /* =========================================================
      HERO SCROLL
      ========================================================= */
+  // Move within the oversized video so scrolling never exposes a gap above it.
   gsap.to(".hero__img", {
-    yPercent: 12, ease: "none",
+    yPercent: -12, ease: "none",
     scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
   });
   gsap.to(".hero__title", {
@@ -500,14 +501,26 @@ function setupExpertise() {
 
 function setupHeader() {
   const header = document.querySelector(".header");
-  let last = 0;
-  window.addEventListener("scroll", () => {
+  if (!header) return;
+  const hero = document.querySelector(".hero");
+  let last = window.scrollY;
+
+  function updateHeader() {
     const y = window.scrollY;
-    header.classList.toggle("is-scrolled", y > 40);
-    const hide = y > last && y > window.innerHeight * 0.6 && !document.body.classList.contains("menu-open");
+    const beyondHero = hero
+      ? hero.getBoundingClientRect().bottom <= header.offsetHeight
+      : y > 40;
+    header.classList.toggle("is-scrolled", beyondHero);
+    const hide = beyondHero && y > last && y > window.innerHeight * 0.6
+      && !document.body.classList.contains("menu-open");
     header.classList.toggle("is-hidden", hide);
     last = y;
-  }, { passive: true });
+  }
+
+  window.addEventListener("scroll", updateHeader, { passive: true });
+  window.addEventListener("resize", updateHeader);
+  window.addEventListener("pageshow", updateHeader);
+  updateHeader();
 }
 
 function setupAnchors(lenis) {
