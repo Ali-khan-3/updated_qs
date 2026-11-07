@@ -1008,7 +1008,7 @@ em { font-style: italic; }
 }
 .project__media { aspect-ratio: 1 / 1; background: var(--bone); }
 .project__media::after { content: none; }
-.project__media img { width: 100%; height: 100%; margin: 0; object-fit: contain; }
+.project__media img { width: 100%; height: 100%; margin: 0; object-fit: cover; object-position: center; }
 .project:hover .project__media img { scale: 1; }
 .pj-hero { display: grid; gap: var(--s-4); min-height: auto; padding: 8rem var(--gutter) var(--s-4); align-items: center; }
 .pj-hero__inner { order: 0; padding: 0; min-width: 0; width: 100%; }
