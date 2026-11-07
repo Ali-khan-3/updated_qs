@@ -9,13 +9,13 @@
   <meta name="theme-color" content="#737e66" />
   <meta property="og:title" content="QS Realty — The Best At What We Build" />
   <meta property="og:description" content="Construction, redevelopment and real estate development across Mumbai's eastern and western suburbs." />
-  <meta property="og:image" content="assets/img/hero-towers.jpg" />
+  <meta property="og:image" content="assets/client/projects/Pinnacle, Kurla west.png" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="preload" as="image" href="assets/img/hero-towers.jpg" />
+  <link rel="preload" as="image" href="assets/client/projects/Pinnacle, Kurla west.png" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -27,7 +27,7 @@
         <rect x="1" y="1" width="198" height="228" stroke="currentColor" stroke-width="1.5" />
       </svg>
       <div class="preloader__mark">
-        <span class="preloader__qs">QS</span>
+        <img class="preloader__qs" src="assets/client/branding/QS LOGO.png" alt="" width="268" height="226" />
         <span class="preloader__realty">Realty</span>
       </div>
     </div>
@@ -43,7 +43,7 @@
   <!-- ============ HEADER ============ -->
   <header class="header">
     <a href="#top" class="brand" aria-label="QS Realty — home">
-      <span class="brand__box"><span class="brand__qs">QS</span><span class="brand__realty">Realty</span></span>
+      <span class="brand__box"><img class="brand__logo" src="assets/client/branding/QS LOGO.png" alt="" width="268" height="226" /><span class="brand__realty">Realty</span></span>
     </a>
     <nav class="header__nav" aria-label="Primary">
       <a href="#about" class="nav-link">About</a>
@@ -71,7 +71,8 @@
         <li><a href="#projects"><i>04</i><span>Projects</span></a></li>
         <li><a href="#philosophy"><i>05</i><span>Vision</span></a></li>
         <li><a href="#footprint"><i>06</i><span>Footprint</span></a></li>
-        <li><a href="#contact"><i>07</i><span>Contact</span></a></li>
+        <li><a href="#verticals"><i>07</i><span>Our verticals</span></a></li>
+        <li><a href="#contact"><i>08</i><span>Contact</span></a></li>
       </ol>
       <div class="menu__aside">
         <p class="eyebrow">Main Office</p>
@@ -87,7 +88,9 @@
     <!-- ============ HERO ============ -->
     <section class="hero" data-cursor-dark>
       <div class="hero__media">
-        <img src="assets/img/hero-towers.jpg" alt="Looking up at modern towers against the sky" class="hero__img" />
+        <video class="hero__img hero__video" muted loop playsinline preload="metadata" poster="assets/client/projects/Pinnacle, Kurla west.png" aria-hidden="true" tabindex="-1">
+          <source src="assets/client/video/watermarked_preview.mp4" type="video/mp4" />
+        </video>
         <div class="hero__shade"></div>
       </div>
 
@@ -102,6 +105,7 @@
       </h1>
 
       <div class="hero__bottom">
+        <button class="hero__video-toggle" type="button" hidden>Play background video</button>
         <p class="hero__lead">Three decades of shaping Mumbai's skyline — from redevelopment and construction to approvals and turnkey delivery.</p>
         <a href="#about" class="scroll-cue" aria-label="Scroll to content">
           <span class="scroll-cue__line"></span>
@@ -121,9 +125,6 @@
         </p>
 
         <div class="intro__grid">
-          <figure class="intro__figure reveal-clip">
-            <img src="assets/img/blueprint.jpg" alt="Architect drafting building plans" loading="lazy" data-parallax />
-          </figure>
           <div class="intro__copy">
             <p class="reveal-up">Driven by an in-house team of seasoned professionals, we translate visions into reality while maintaining integrity, transparency and client satisfaction at every stage.</p>
             <p class="reveal-up">We believe true construction excellence lies not only in structural strength but in the harmony of practical design and execution. As we evolve, we keep raising construction standards, adopting modern technologies and embracing sustainable building — creating timeless assets of exceptional value.</p>
@@ -132,9 +133,6 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
             </a>
           </div>
-          <figure class="intro__figure intro__figure--small reveal-clip">
-            <img src="assets/img/structure-workers.jpg" alt="Workers building a reinforced concrete structure" loading="lazy" data-parallax />
-          </figure>
         </div>
       </div>
     </section>
@@ -175,29 +173,20 @@
     <!-- ============ TEAM ============ -->
     <section class="team section" id="team">
       <div class="container team__grid">
-        <div class="team__aside">
-          <div class="team__intro">
+        <div class="team__intro">
             <p class="eyebrow"><span class="num">(03)</span> Meet our team</p>
             <h2 class="team__title reveal-lines"><span class="line"><span>The people behind</span></span><span class="line"><span><em>every build.</em></span></span></h2>
             <p class="team__lede reveal-up">Leadership, design and site execution — one in-house team, accountable from the first drawing to the final key.</p>
           </div>
 
-          <ul class="team__crew">
-            <li class="crew reveal-up"><span class="crew__avatar">AS</span><div><h3>Altaf Shaikh</h3><p>Project Head</p></div></li>
-            <li class="crew reveal-up"><span class="crew__avatar">AK</span><div><h3>Arvind Kadam</h3><p>Draughtsman</p></div></li>
-            <li class="crew reveal-up"><span class="crew__avatar">KS</span><div><h3>Kashif Shaikh</h3><p>Site Co-ordinator</p></div></li>
-            <li class="crew reveal-up"><span class="crew__avatar">SK</span><div><h3>Sohail Khan</h3><p>Office Co-ordinator</p></div></li>
-          </ul>
-        </div>
-
         <div class="team__main">
           <div class="team__leaders">
             <article class="leader reveal-up">
-              <div class="leader__portrait"><span class="leader__initials">FQ</span></div>
+              <div class="leader__portrait"><img src="assets/client/team/Fahad portrait.png" alt="Fahad Quraishi, Managing Director at QS Realty" loading="lazy" decoding="async" width="504" height="588" /></div>
               <div class="leader__caption"><h3>Fahad Quraishi</h3><p>Managing Director</p></div>
             </article>
             <article class="leader reveal-up">
-              <div class="leader__portrait"><span class="leader__initials">HS</span></div>
+              <div class="leader__portrait"><img src="assets/client/team/Hamza portrait.png" alt="Hamza Shaikh, Managing Director at QS Realty" loading="lazy" decoding="async" width="503" height="589" /></div>
               <div class="leader__caption"><h3>Hamza Shaikh</h3><p>Managing Director</p></div>
             </article>
           </div>
@@ -211,96 +200,121 @@
             </dl>
           </div>
         </div>
+
+        <div class="team__aside">
+          <ul class="team__crew">
+            <li class="crew reveal-up"><span class="crew__avatar">AS</span><div><h3>Altaf Shaikh</h3><p>Project Head</p></div></li>
+            <li class="crew reveal-up"><span class="crew__avatar">AK</span><div><h3>Arvind Kadam</h3><p>Draughtsman</p></div></li>
+            <li class="crew reveal-up"><span class="crew__avatar">KS</span><div><h3>Kashif Shaikh</h3><p>Site Co-ordinator</p></div></li>
+            <li class="crew reveal-up"><span class="crew__avatar">SK</span><div><h3>Sohail Khan</h3><p>Office Co-ordinator</p></div></li>
+          </ul>
+        </div>
       </div>
     </section>
 
-    <!-- ============ SERVICES — HORIZONTAL LIFECYCLE ============ -->
-    <section class="services" id="services">
-      <div class="services__pin">
-        <div class="services__intro">
-          <p class="eyebrow"><span class="num">(04)</span> Our expertise</p>
-          <h2 class="h2"><span class="line"><span>One roof.</span></span><span class="line"><span><em>Every</em> stage.</span></span></h2>
+    <!-- ============ SERVICES — DEVELOPMENT MAP ============ -->
+    <section class="services" id="services" aria-labelledby="expertise-title">
+      <div class="container">
+        <div class="services__heading">
+          <p class="eyebrow">Our expertise</p>
+          <h2 class="h2" id="expertise-title">One roof.<br /><em>Every stage.</em></h2>
           <p class="services__lede">Our in-house expertise spans the entire development lifecycle. By integrating every stage under one roof, we ensure seamless execution, uncompromising quality, cost efficiency and timely completion.</p>
-          <p class="services__hint"><span class="services__hint-line"></span>Scroll to walk the lifecycle</p>
+          <a href="#contact" class="btn-arrow"><span>Start your project</span><span aria-hidden="true">↗</span></a>
         </div>
-
-        <div class="services__track">
-          <article class="phase">
-            <div class="phase__media"><img src="assets/img/excavation.jpg" alt="Excavator preparing a construction site" loading="lazy" /></div>
-            <div class="phase__body">
-              <span class="phase__num">01</span>
-              <h3 class="phase__title">Land Assessment</h3>
-              <p>Evaluating site potential, title, development rights and viability before any commitment is made.</p>
+        <div class="journey">
+          <div class="journey__map" hidden>
+            <p class="journey__hint">Select a stage to explore our expertise.</p>
+            <div class="journey__stops" role="tablist" aria-label="Development stages">
+              <button class="journey__stop" id="journey-tab-01" type="button" role="tab" aria-selected="true" aria-controls="journey-panel-01" tabindex="0">
+                <span class="journey__portrait"><img src="assets/img/excavation.jpg" alt="" loading="lazy" width="96" height="96" /><span class="journey__number" aria-hidden="true">01</span></span>
+                <span class="journey__label">Land Assessment</span>
+              </button>
+              <button class="journey__stop" id="journey-tab-02" type="button" role="tab" aria-selected="false" aria-controls="journey-panel-02" tabindex="-1">
+                <span class="journey__portrait"><img src="assets/img/blueprint.jpg" alt="" loading="lazy" width="96" height="96" /><span class="journey__number" aria-hidden="true">02</span></span>
+                <span class="journey__label">Feasibility Studies</span>
+              </button>
+              <button class="journey__stop" id="journey-tab-03" type="button" role="tab" aria-selected="false" aria-controls="journey-panel-03" tabindex="-1">
+                <span class="journey__portrait"><img src="assets/img/commercial-facade.jpg" alt="" loading="lazy" width="96" height="96" /><span class="journey__number" aria-hidden="true">03</span></span>
+                <span class="journey__label">Architecture &amp; Engineering</span>
+              </button>
+              <button class="journey__stop" id="journey-tab-04" type="button" role="tab" aria-selected="false" aria-controls="journey-panel-04" tabindex="-1">
+                <span class="journey__portrait"><img src="assets/img/office-interior.jpg" alt="" loading="lazy" width="96" height="96" /><span class="journey__number" aria-hidden="true">04</span></span>
+                <span class="journey__label">Approvals &amp; Liaison</span>
+              </button>
+              <button class="journey__stop" id="journey-tab-05" type="button" role="tab" aria-selected="false" aria-controls="journey-panel-05" tabindex="-1">
+                <span class="journey__portrait"><img src="assets/img/site-aerial.jpg" alt="" loading="lazy" width="96" height="96" /><span class="journey__number" aria-hidden="true">05</span></span>
+                <span class="journey__label">Project Planning</span>
+              </button>
+              <button class="journey__stop" id="journey-tab-06" type="button" role="tab" aria-selected="false" aria-controls="journey-panel-06" tabindex="-1">
+                <span class="journey__portrait"><img src="assets/img/structure-workers.jpg" alt="" loading="lazy" width="96" height="96" /><span class="journey__number" aria-hidden="true">06</span></span>
+                <span class="journey__label">Construction Management</span>
+              </button>
+              <button class="journey__stop" id="journey-tab-07" type="button" role="tab" aria-selected="false" aria-controls="journey-panel-07" tabindex="-1">
+                <span class="journey__portrait"><img src="assets/img/rebar-site.jpg" alt="" loading="lazy" width="96" height="96" /><span class="journey__number" aria-hidden="true">07</span></span>
+                <span class="journey__label">Quality Assurance</span>
+              </button>
+              <button class="journey__stop" id="journey-tab-08" type="button" role="tab" aria-selected="false" aria-controls="journey-panel-08" tabindex="-1">
+                <span class="journey__portrait"><img src="assets/img/bungalow-modern.jpg" alt="" loading="lazy" width="96" height="96" /><span class="journey__number" aria-hidden="true">08</span></span>
+                <span class="journey__label">Turnkey Delivery</span>
+              </button>
             </div>
-          </article>
-          <article class="phase">
-            <div class="phase__media"><img src="assets/img/blueprint.jpg" alt="Building plans on a drafting table" loading="lazy" /></div>
-            <div class="phase__body">
-              <span class="phase__num">02</span>
-              <h3 class="phase__title">Feasibility Studies</h3>
-              <p>Technical, financial and market modelling that turns a plot into a clear, bankable plan.</p>
+          </div>
+          <div class="journey__detail">
+            <article class="journey__panel" id="journey-panel-01">
+              <div class="journey__copy">
+                <h3 class="journey__title">Land Assessment</h3>
+                <p class="journey__description">Evaluating site potential, title, development rights and viability before any commitment is made.</p>
+              </div>
+            </article>
+            <article class="journey__panel" id="journey-panel-02">
+              <div class="journey__copy">
+                <h3 class="journey__title">Feasibility Studies</h3>
+                <p class="journey__description">Technical, financial and market modelling that turns a plot into a clear, bankable plan.</p>
+              </div>
+            </article>
+            <article class="journey__panel" id="journey-panel-03">
+              <div class="journey__copy">
+                <h3 class="journey__title">Architecture &amp; Engineering</h3>
+                <p class="journey__description">Coordinating architects, structural and services consultants into one resolved design.</p>
+              </div>
+            </article>
+            <article class="journey__panel" id="journey-panel-04">
+              <div class="journey__copy">
+                <h3 class="journey__title">Approvals &amp; Liaison</h3>
+                <p class="journey__description">Statutory approvals and regulatory liaison handled end-to-end, so projects move without friction.</p>
+              </div>
+            </article>
+            <article class="journey__panel" id="journey-panel-05">
+              <div class="journey__copy">
+                <h3 class="journey__title">Project Planning</h3>
+                <p class="journey__description">Sequencing, budgeting and scheduling with value engineering built in from day one.</p>
+              </div>
+            </article>
+            <article class="journey__panel" id="journey-panel-06">
+              <div class="journey__copy">
+                <h3 class="journey__title">Construction Management</h3>
+                <p class="journey__description">Disciplined on-site execution led by our own project heads and site coordinators.</p>
+              </div>
+            </article>
+            <article class="journey__panel" id="journey-panel-07">
+              <div class="journey__copy">
+                <h3 class="journey__title">Quality Assurance</h3>
+                <p class="journey__description">Engineering accuracy and meticulous checks at every pour, every floor, every finish.</p>
+              </div>
+            </article>
+            <article class="journey__panel" id="journey-panel-08">
+              <div class="journey__copy">
+                <h3 class="journey__title">Turnkey Delivery</h3>
+                <p class="journey__description">Keys in hand — complete, compliant and ready to live or work in, on time.</p>
+              </div>
+            </article>
+            <div class="journey__controls" hidden>
+              <span class="journey__count" aria-live="polite" aria-atomic="true">01 / 08</span>
+              <div class="journey__arrows">
+                <button class="journey__arrow" type="button" data-journey-prev aria-label="Previous stage"><span aria-hidden="true">←</span></button>
+                <button class="journey__arrow" type="button" data-journey-next aria-label="Next stage"><span aria-hidden="true">→</span></button>
+              </div>
             </div>
-          </article>
-          <article class="phase">
-            <div class="phase__media"><img src="assets/img/commercial-facade.jpg" alt="Geometric modern building facade" loading="lazy" /></div>
-            <div class="phase__body">
-              <span class="phase__num">03</span>
-              <h3 class="phase__title">Architecture &amp; Engineering</h3>
-              <p>Coordinating architects, structural and services consultants into one resolved design.</p>
-            </div>
-          </article>
-          <article class="phase">
-            <div class="phase__media"><img src="assets/img/office-interior.jpg" alt="Modern office corridor" loading="lazy" /></div>
-            <div class="phase__body">
-              <span class="phase__num">04</span>
-              <h3 class="phase__title">Approvals &amp; Liaison</h3>
-              <p>Statutory approvals and regulatory liaison handled end-to-end, so projects move without friction.</p>
-            </div>
-          </article>
-          <article class="phase">
-            <div class="phase__media"><img src="assets/img/site-aerial.jpg" alt="Engineers walking across a construction site" loading="lazy" /></div>
-            <div class="phase__body">
-              <span class="phase__num">05</span>
-              <h3 class="phase__title">Project Planning</h3>
-              <p>Sequencing, budgeting and scheduling with value engineering built in from day one.</p>
-            </div>
-          </article>
-          <article class="phase">
-            <div class="phase__media"><img src="assets/img/structure-workers.jpg" alt="Workers on reinforced concrete columns" loading="lazy" /></div>
-            <div class="phase__body">
-              <span class="phase__num">06</span>
-              <h3 class="phase__title">Construction Management</h3>
-              <p>Disciplined on-site execution led by our own project heads and site coordinators.</p>
-            </div>
-          </article>
-          <article class="phase">
-            <div class="phase__media"><img src="assets/img/rebar-site.jpg" alt="Engineers inspecting rebar on a slab" loading="lazy" /></div>
-            <div class="phase__body">
-              <span class="phase__num">07</span>
-              <h3 class="phase__title">Quality Assurance</h3>
-              <p>Engineering accuracy and meticulous checks at every pour, every floor, every finish.</p>
-            </div>
-          </article>
-          <article class="phase phase--last">
-            <div class="phase__media"><img src="assets/img/bungalow-modern.jpg" alt="Completed modern residence at dusk" loading="lazy" /></div>
-            <div class="phase__body">
-              <span class="phase__num">08</span>
-              <h3 class="phase__title">Turnkey Delivery</h3>
-              <p>Keys in hand — complete, compliant and ready to live or work in, on time.</p>
-            </div>
-          </article>
-        </div>
-
-        <div class="services__progress" aria-hidden="true"><span></span></div>
-
-        <!-- the last stage grows from its card into a full-screen close (desktop only) -->
-        <div class="services__finale">
-          <img src="assets/img/bungalow-modern.jpg" alt="" loading="lazy" />
-          <div class="services__finale-copy">
-            <p class="eyebrow eyebrow--light"><span class="num">(08)</span> The final stage</p>
-            <h3 class="services__finale-title">Turnkey <em>Delivery.</em></h3>
-            <p class="services__finale-text">Keys in hand — complete, compliant and ready to live or work in, on time.</p>
-            <a href="#contact" class="btn btn--pill btn--light" data-magnetic><span>Start your project</span></a>
           </div>
         </div>
       </div>
@@ -309,17 +323,13 @@
     <!-- ============ PROJECTS ============ -->
     <section class="projects section" id="projects">
       <div class="container">
-        <div class="section-head section-head--split">
-          <p class="eyebrow"><span class="num">(05)</span> Development ventures</p>
-          <h2 class="h2 reveal-lines"><span class="line"><span>Our development</span></span><span class="line"><span><em>ventures.</em></span></span></h2>
-        </div>
-
-        <!-- rendered from js/projects-data.js -->
-        <div class="completed">
+        <div class="completed" id="completed-projects">
           <div class="completed__head">
-            <p class="eyebrow">Completed works</p>
-            <h3 class="completed__title reveal-lines"><span class="line"><span>A legacy,</span></span><span class="line"><span><em>delivered.</em></span></span></h3>
-            <p class="completed__lede reveal-up"><span data-completed-count>20</span> completed buildings across Mumbai — homes, villas, institutions and mixed-use addresses, each delivered with the same care.</p>
+            <div>
+              <p class="eyebrow">Completed works</p>
+              <h2 class="completed__title">A legacy, <em>delivered.</em></h2>
+            </div>
+            <p class="completed__lede"><span data-completed-count>20</span> completed buildings across Mumbai — each delivered with the same care.</p>
           </div>
           <ol class="completed__list" data-render="completed"></ol>
         </div>
@@ -369,7 +379,7 @@
         <div class="ethos__vision">
           <div class="ethos__vision-main">
             <p class="eyebrow eyebrow--light"><span class="num">(07)</span> Our ethos — Vision</p>
-            <p class="ethos__statement js-words">To be recognised as one of India's most distinguished real estate and construction enterprises — creating <em>timeless landmarks</em> that transcend generations, and shaping the skylines of tomorrow with integrity, innovation, precision and enduring value.</p>
+            <p class="ethos__statement">To be recognised as one of India's most distinguished real estate and construction enterprises — creating <em>timeless landmarks</em> that transcend generations, and shaping the skylines of tomorrow with integrity, innovation, precision and enduring value.</p>
           </div>
           <div class="ethos__mission">
             <p class="eyebrow eyebrow--light">Mission</p>
@@ -378,31 +388,18 @@
         </div>
 
         <div class="ethos__grid">
-          <!-- sticky frame: the image follows whichever value is in focus -->
-          <div class="ethos__stage" aria-hidden="true">
-            <div class="ethos__frame">
-              <img class="ethos__img is-active" src="assets/img/villa-facade.jpg" alt="" loading="lazy" />
-              <img class="ethos__img" src="assets/img/interior-hall.jpg" alt="" loading="lazy" />
-              <img class="ethos__img" src="assets/img/glass-pavilion.jpg" alt="" loading="lazy" />
-              <img class="ethos__img" src="assets/img/rebar-site.jpg" alt="" loading="lazy" />
-              <img class="ethos__img" src="assets/img/bungalow-modern.jpg" alt="" loading="lazy" />
-              <img class="ethos__img" src="assets/img/mumbai-gateway.jpg" alt="" loading="lazy" />
-              <p class="ethos__count"><span class="js-ethos-num">01</span><small>/ 06</small></p>
-            </div>
-          </div>
-
           <div class="ethos__body">
             <div class="ethos__values-head" id="values">
               <p class="eyebrow eyebrow--light">Core values</p>
               <h2 class="h2 reveal-lines"><span class="line"><span>What we <em>stand on.</em></span></span></h2>
             </div>
             <ol class="ethos__values">
-              <li class="ethos__value is-active"><span class="ethos__value-num">01</span><h3 class="ethos__value-title">Trust</h3><p class="ethos__value-desc">The foundation of every relationship we build.</p></li>
-              <li class="ethos__value"><span class="ethos__value-num">02</span><h3 class="ethos__value-title">Craftsmanship</h3><p class="ethos__value-desc">An uncompromising commitment to quality, detail and enduring excellence.</p></li>
-              <li class="ethos__value"><span class="ethos__value-num">03</span><h3 class="ethos__value-title">Innovation</h3><p class="ethos__value-desc">Progressive thinking that shapes future-ready developments.</p></li>
-              <li class="ethos__value"><span class="ethos__value-num">04</span><h3 class="ethos__value-title">Precision</h3><p class="ethos__value-desc">Engineering accuracy and meticulous execution at every stage.</p></li>
-              <li class="ethos__value"><span class="ethos__value-num">05</span><h3 class="ethos__value-title">Sustainability</h3><p class="ethos__value-desc">Responsible development that respects people, place and the environment.</p></li>
-              <li class="ethos__value"><span class="ethos__value-num">06</span><h3 class="ethos__value-title">Legacy</h3><p class="ethos__value-desc">Creating timeless spaces that inspire, endure and appreciate in value.</p></li>
+              <li class="ethos__value"><h3 class="ethos__value-title">Trust</h3><p class="ethos__value-desc">The foundation of every relationship we build.</p></li>
+              <li class="ethos__value"><h3 class="ethos__value-title">Craftsmanship</h3><p class="ethos__value-desc">An uncompromising commitment to quality, detail and enduring excellence.</p></li>
+              <li class="ethos__value"><h3 class="ethos__value-title">Innovation</h3><p class="ethos__value-desc">Progressive thinking that shapes future-ready developments.</p></li>
+              <li class="ethos__value"><h3 class="ethos__value-title">Precision</h3><p class="ethos__value-desc">Engineering accuracy and meticulous execution at every stage.</p></li>
+              <li class="ethos__value"><h3 class="ethos__value-title">Sustainability</h3><p class="ethos__value-desc">Responsible development that respects people, place and the environment.</p></li>
+              <li class="ethos__value"><h3 class="ethos__value-title">Legacy</h3><p class="ethos__value-desc">Creating timeless spaces that inspire, endure and appreciate in value.</p></li>
             </ol>
           </div>
         </div>
@@ -436,7 +433,7 @@
             <rect width="600" height="640" fill="url(#grid)" />
             <!-- sea / coastline (stylised) -->
             <path class="map-sea" d="M0 0H120C110 60 96 110 112 160 128 210 98 250 104 300 110 350 132 380 118 430 104 480 120 540 150 590 170 620 160 640 160 640H0Z" />
-            <path class="map-coast" d="M120 0C110 60 96 110 112 160 128 210 98 250 104 300 110 350 132 380 118 430 104 480 120 540 150 590 170 620 160 640" />
+            <path class="map-coast" d="M120 0C110 60 96 110 112 160 128 210 98 250 104 300 110 350 132 380 118 430 104 480 120 540 150 590 170 620 160 640 160 640" />
             <path class="map-creek" d="M600 120C540 150 520 210 548 270 570 320 540 380 560 430 576 470 600 480 600 480" />
             <!-- roads -->
             <path class="map-road" d="M200 0C210 120 190 240 210 360 226 460 220 560 240 640" />
@@ -458,52 +455,35 @@
       </div>
     </section>
 
-    <!-- ============ CLIENTS ============ -->
-    <section class="clients section section--dark" id="clients" data-cursor-dark>
-      <div class="container">
-        <div class="section-head section-head--split">
-          <p class="eyebrow eyebrow--light"><span class="num">(09)</span> Clients served with excellence</p>
-          <h2 class="h2 reveal-lines"><span class="line"><span>Trusted by homes,</span></span><span class="line"><span><em>societies &amp; landmarks.</em></span></span></h2>
+    <!-- ============ GROUP OF COMPANIES ============ -->
+    <section class="verticals section" id="verticals" aria-labelledby="verticals-title">
+      <div class="container verticals__layout">
+        <div class="verticals__intro">
+          <p class="eyebrow">Our verticals</p>
+          <h2 class="h2" id="verticals-title">Group of<br /><em>companies.</em></h2>
+          <a class="link-u verticals__all" href="group.html" target="_blank" rel="noopener">View our group <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
         </div>
-      </div>
-
-      <div class="marquee" aria-hidden="true">
-        <div class="marquee__track">
-          <span>The Meridian Towers</span><i>✦</i><span>BDD Chawl · MHADA</span><i>✦</i><span>Juhu Supreme Shopping Centre</span><i>✦</i><span>Gazebo House</span><i>✦</i><span>Mist Mountain</span><i>✦</i><span>Juhu Prajakt CHS</span><i>✦</i>
+        <div class="verticals__cards">
+          <a class="vertical-card vertical-card--qs-infra" href="group.html#qs-infra" target="_blank" rel="noopener" aria-label="QS Infra — explore our group portfolio (opens in a new tab)">
+            <h3 class="vertical-card__wordmark"><span class="vertical-card__qs">QS</span><span class="vertical-card__name">Infra</span></h3>
+            <span class="vertical-card__link">Explore our group <span aria-hidden="true">↗</span></span>
+          </a>
+          <a class="vertical-card vertical-card--qs-associates" href="group.html#qs-associates" target="_blank" rel="noopener" aria-label="QS Associates — explore our group portfolio (opens in a new tab)">
+            <h3 class="vertical-card__wordmark"><span class="vertical-card__qs">QS</span><span class="vertical-card__name">Associates</span></h3>
+            <span class="vertical-card__link">Explore our group <span aria-hidden="true">↗</span></span>
+          </a>
+          <a class="vertical-card vertical-card--aura-viva-designs" href="group.html#aura-viva-designs" target="_blank" rel="noopener" aria-label="Aura-Viva Designs — explore our group portfolio (opens in a new tab)">
+            <h3 class="vertical-card__wordmark"><span class="vertical-card__aura">Aura-Viva</span><span class="vertical-card__name">Designs</span></h3>
+            <span class="vertical-card__link">Explore our group <span aria-hidden="true">↗</span></span>
+          </a>
         </div>
-      </div>
-      <div class="marquee marquee--reverse" aria-hidden="true">
-        <div class="marquee__track">
-          <span>ILA CHSL</span><i>✦</i><span>Vikas Apartment</span><i>✦</i><span>Bismillah Restaurant</span><i>✦</i><span>Nawaz Hostel</span><i>✦</i><span>Raj Babbar Bungalow</span><i>✦</i><span>Limbachiya Residence</span><i>✦</i>
-        </div>
-      </div>
-
-      <div class="container">
-        <ul class="clients__table">
-          <li><span>The Meridian Towers</span><span>Resi + Comm Building</span><span>Ghatkopar</span></li>
-          <li><span>BDD Chawl, MHADA</span><span>Redevelopment</span><span>N. M. Joshi Marg</span></li>
-          <li><span>Hon. Ex MP Raj Babbar</span><span>Bungalow</span><span>JVPD</span></li>
-          <li><span>Juhu Supreme Shopping Centre</span><span>Commercial Building</span><span>JVPD</span></li>
-          <li><span>Bismillah Restaurant</span><span>Commercial Building</span><span>JVPD</span></li>
-          <li><span>ILA CHSL</span><span>Residential Building</span><span>JVPD</span></li>
-          <li><span>Juhu Prajakt CHS</span><span>Housing Society</span><span>JVPD</span></li>
-          <li><span>Gazebo House</span><span>Commercial Building</span><span>JVPD</span></li>
-          <li><span>Vikas Apartment</span><span>Residential</span><span>Pant Nagar, Ghatkopar</span></li>
-          <li><span>Mr. Harsh Limbachiya</span><span>Bungalow</span><span>Versova</span></li>
-          <li><span>Mr. Chacko Jose</span><span>Bungalow</span><span>Kalina</span></li>
-          <li><span>Nawaz Hostel</span><span>Commercial Building</span><span>Ratnagiri</span></li>
-          <li><span>Mist Mountain</span><span>Bungalow</span><span>Trimbakeshwar</span></li>
-        </ul>
       </div>
     </section>
 
     <!-- ============ CONTACT ============ -->
     <section class="contact" id="contact" data-cursor-dark>
-      <!-- left: photo that follows the selected tab, headline and office details -->
+      <!-- left: solid beige panel, headline and office details -->
       <div class="contact__visual">
-        <img class="contact__img is-active" data-tab="enquiry" src="assets/img/interior-lounge.jpg" alt="" loading="lazy" />
-        <img class="contact__img" data-tab="callback" src="assets/img/office-interior.jpg" alt="" loading="lazy" />
-        <img class="contact__img" data-tab="visit" src="assets/img/structure-workers.jpg" alt="" loading="lazy" />
         <div class="contact__visual-inner">
           <p class="eyebrow eyebrow--light"><span class="num">(10)</span> Contact us</p>
           <div class="contact__headline">
@@ -616,6 +596,7 @@
           <a href="#services" class="link-u">Expertise</a>
           <a href="#projects" class="link-u">Projects</a>
           <a href="#footprint" class="link-u">Footprint</a>
+          <a href="#verticals" class="link-u">Our verticals</a>
           <a href="#team" class="link-u">Team</a>
           <a href="#contact" class="link-u">Contact</a>
         </nav>

@@ -24,7 +24,7 @@
       const m = meta(p);
       return `
         <a class="project" href="project.html?p=${esc(p.slug)}" data-cursor="View project" data-transition>
-          <div class="project__media"><img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" loading="lazy" data-parallax /></div>
+          <div class="project__media"><img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" loading="lazy" decoding="async" /></div>
           <div class="project__info">
             <span class="tag tag--live">${esc(p.status)}</span>
             <span class="project__index">${pad(i + 1)} / ${pad(data.featured.length)}</span>
@@ -52,9 +52,8 @@
   /* ---------- home page: completed works ---------- */
   const completedEl = document.querySelector('[data-render="completed"]');
   if (completedEl) {
-    completedEl.innerHTML = data.completed.map((p, i) => `
-      <li class="done reveal-up">
-        <span class="done__num">${pad(i + 1)}</span>
+    completedEl.innerHTML = data.completed.map((p) => `
+      <li class="done">
         <div>
           <h4 class="done__name">${esc(p.name)}</h4>
           <p class="done__desc">${esc(p.desc)}</p>
@@ -77,8 +76,7 @@
 
     root.innerHTML = `
       <section class="pj-hero" data-cursor-dark>
-        <div class="pj-hero__media"><img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" data-parallax /></div>
-        <div class="pj-hero__shade"></div>
+        <div class="pj-hero__media"><a href="${esc(p.image)}" target="_blank" rel="noopener" aria-label="Open ${esc(p.name)} rendering at full size (opens in a new tab)"><img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" width="${p.imageWidth}" height="${p.imageHeight}" fetchpriority="high" /></a></div>
         <div class="pj-hero__inner container">
           <a href="index.html#projects" class="pj-back link-u" data-transition>← All ventures</a>
           <p class="eyebrow eyebrow--light"><span class="num">(${pad(i + 1)})</span> Development venture</p>
@@ -99,11 +97,15 @@
         </div>
       </section>
 
-      <section class="pj-gallery">
+      <section class="pj-gallery" aria-label="Project renderings">
+        <div class="container"><h2 class="h2 pj-gallery__title">Project <em>views.</em></h2></div>
         <div class="container pj-gallery__grid">
           ${p.gallery.map((g, k) => `
-            <figure class="pj-gallery__item pj-gallery__item--${k + 1} reveal-clip">
-              <img src="${esc(g.src)}" alt="${esc(g.alt)}" loading="lazy" data-parallax />
+            <figure class="pj-gallery__item pj-gallery__item--${k + 1}">
+              <a href="${esc(g.src)}" target="_blank" rel="noopener" aria-label="Open ${esc(g.alt)} at full size (opens in a new tab)">
+                <img src="${esc(g.src)}" alt="${esc(g.alt)}" loading="lazy" decoding="async" width="${g.width}" height="${g.height}" />
+              </a>
+              <figcaption>${esc(g.alt)}</figcaption>
             </figure>`).join("")}
         </div>
       </section>

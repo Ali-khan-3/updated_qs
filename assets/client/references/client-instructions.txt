@@ -1,0 +1,146 @@
+QS REALTY CLIENT MATERIALS
+Project folder
+C:\Projects\Construction website
+
+Source
+Hamza Shaikh (QS), WhatsApp messages dated 7 November 2026.
+Files downloaded locally from the authorized chat and copied from Downloads.
+Company profile PDF was already present in Downloads and is included as supporting material.
+
+LOCAL ASSETS
+branding\QS LOGO.png
+team\Fahad portrait.png
+team\Hamza portrait.png
+projects\Pinnacle, Kurla west.png
+  Client caption at 01:00 — Pinnacle project image
+projects\Lands Avenue at Dusk.png
+  Client caption at 01:03 — Lands avenue, Bazaar Road, Mumbai
+projects\makka heights, Carter road, Bandra West.jpeg
+video\watermarked_preview.mp4
+  Supplied at 00:35 and referenced for the hero at 00:36.
+  Observed 20-second city/construction-crane video with an Envato watermark.
+references\development jurney.png
+  Supplied at 00:54 with https://www.landspectfuture.in/
+  Client caption — as per this website, lets make this interactive (keeping our context intact)
+  Reference image shows Vision, Feasibility, Planning, Construction and Handover.
+documents\QS Realty Profile_20260703_113217_0000.pdf
+
+BISMILLAH RESTAURANT
+Five-photo album at 14:43 followed by the client caption "Bismillah restaurant".
+The renderings visibly carry Hotel Blue Moon signage and an architectural watermark.
+Their assignment to Bismillah follows the client's caption.
+projects\bismillah\WhatsApp Image 2026-11-07 at 2.43.28 PM.jpeg
+  Album image 1
+projects\bismillah\WhatsApp Image 2026-11-07 at 2.43.28 PM (1).jpeg
+  Album image 2
+projects\bismillah\WhatsApp Image 2026-11-07 at 2.43.28 PM (3).jpeg
+  Album image 3
+projects\bismillah\WhatsApp Image 2026-11-07 at 2.43.29 PM.jpeg
+  Album image 4
+projects\bismillah\WhatsApp Image 2026-11-07 at 2.43.29 PM (1).jpeg
+  Album image 5
+
+ANNOTATED REFERENCES
+references\annotations\WhatsApp Image 2026-11-07 at 12.36.05 AM.jpeg
+Hero
+Let's replace this with the video..
+
+references\annotations\WhatsApp Image 2026-11-07 at 12.38.40 AM.jpeg
+About
+Remove images
+
+references\annotations\WhatsApp Image 2026-11-07 at 12.41.26 AM.jpeg
+Team desktop
+Keep fahad and hamza on left as on phone its coming second
+
+references\annotations\WhatsApp Image 2026-11-07 at 12.41.38 AM.jpeg
+Team mobile
+https://updatedqs.vercel.app/
+
+references\annotations\WhatsApp Image 2026-11-07 at 12.52.11 AM.jpeg
+Services
+Image supplied without a caption.
+
+references\annotations\WhatsApp Image 2026-11-07 at 12.57.10 AM.jpeg
+Completed projects
+Let's Make it small to fit in one page
+Remove residential building and replace it with:
+G+3 floors
+Kurla, Mumbai.
+Different for every project
+
+references\annotations\WhatsApp Image 2026-11-07 at 1.08.05 AM.jpeg
+Vision, mission and values
+Vision , mission, core values...
+All in a single page
+
+references\annotations\WhatsApp Image 2026-11-07 at 1.13.00 AM.jpeg
+Verticals
+Add page below...
+Our verticals
+1. QS Infra
+2. QS associates
+3. Aura-Viva Designs
+Which when clicked opens a new page tab
+
+references\annotations\WhatsApp Image 2026-11-07 at 1.13.17 AM.jpeg
+Clients
+In that new tab add this entire page
+
+references\annotations\WhatsApp Image 2026-11-07 at 1.14.04 AM.jpeg
+Contact
+Remove the image and keep a solid beige background
+
+ADDITIONAL REFERENCE LINK
+At 01:15, replying to the video, the client wrote "for more references".
+https://app.envato.com/search/stock-video/f58855a0-2b66-4fb7-b55f-731f75e4ccd1?itemType=stock-video&term=building+timelapse&adposition=&gad_source=1&gad_campaignid=13445481015&gbraid=0AAAAADclSXnNlyAVuG79XwEiho3bRYnl7&gclid=CjwKCAiAkrbXBhB2EiwA2y1E3g97yfEwNaK55b6F-yS8Q1AIDM3p4VnbBEMPSw-XEpG-0o10Y7Qy4xoCsOoQAvD_BwE
+
+USER CLARIFICATIONS — 7 NOVEMBER 2026
+- Add Our Verticals / Group of Companies directly below the Mumbai footprint section.
+- Reference https://sayajirealty.com/ and adapt its company-card layout to the existing premium QS theme.
+- Use G+3 floors and Kurla, Mumbai on all completed-project cards, as instructed by the user.
+- Completed projects and vision, mission and core values should form compact desktop sections, with responsive mobile stacking.
+
+IMPLEMENTATION CHOICES FOR REVIEW
+- Company names use typography because separate company logos were not supplied.
+- Each card opens the shared group portfolio in a new tab, preserving the existing client list at group level.
+- Company-specific descriptions and client attribution remain available for future refinement.
+
+FILE HANDLING
+Original file names and bytes retained.
+Identical repeat downloads consolidated to one copy.
+Website implementation should reference the local assets above.
+
+CLIENT MEDIA INTEGRATION
+- Local logo used in home and project headers and the preloader.
+- Fahad and Hamza portraits placed before the crew list in reading order.
+- Pinnacle, Lands Avenue, Makka Heights and all five Bismillah renderings linked to project cards and detail pages.
+- Full-size image links and uncropped responsive project galleries added.
+- Local hero video includes pause/play and reduced-motion handling.
+- User will provide clean versions of the watermarked hero video and Bismillah renderings.
+
+ABOUT AND BISMILLAH UPDATE — 7 NOVEMBER 2026
+About uses the existing warm beige token --sand (#e3d6c4). The two About photos were removed following the client annotation.
+Five AI-cleaned Bismillah renderings are used by the website, under assets/client/projects/bismillah/cleaned. Built-in ImageGen was used. AI reconstruction also changes small rendering details such as glass, interiors, cars and textures. These edited images should be reviewed as reconstructed versions.
+The hero video still uses the supplied watermarked file, awaiting a clean replacement.
+
+IMAGEGEN PROMPT SET
+Prompt 1
+Edit the supplied architectural rendering. Remove the repeated translucent diagonal LOTUS watermark lettering and the associated diagonal watermark lines across the entire image. Reconstruct only the pixels obscured by that overlay. Preserve the exact building geometry, floor count, windows, facade materials, HOTEL BLUE MOON sign, gold side panel, street, cars, trees, lighting, camera angle, colors and image framing. Keep the square composition. This is precise cleanup of the client's existing project rendering for their website. Deliver a single full-resolution clean rendering.
+
+Prompt 2
+Use case: precise-object-edit. Edit target: the supplied square daylight side-angle rendering. Remove the repeated translucent diagonal LOTUS lettering and associated diagonal watermark lines throughout this exact architectural rendering. Reconstruct the obscured pixels. Preserve building geometry, floor count, windows, HOTEL BLUE MOON sign, facade, gold advertising panel, rooftop features, cars, street, landscape, viewpoint, lighting and colors faithfully. Keep the full original composition and aspect ratio. Single image output for the client's project gallery. Perform minimal localized cleanup, with the existing scene as the fixed reference.
+
+Prompt 3
+Use case: precise-object-edit. Edit target: the supplied landscape aerial rendering with rooftop solar panels. Remove the repeated translucent diagonal LOTUS lettering and associated diagonal watermark lines throughout this exact architectural rendering. Reconstruct the obscured pixels. Preserve building geometry, floor count, windows, HOTEL BLUE MOON sign, facade, gold advertising panel, rooftop features, cars, street, landscape, viewpoint, lighting and colors faithfully. Keep the full original composition and aspect ratio. Single image output for the client's project gallery. Perform minimal localized cleanup, with the existing scene as the fixed reference.
+
+Prompt 4
+Use case: precise-object-edit. Edit target: the supplied square nighttime front-angle rendering. Remove the repeated translucent diagonal LOTUS lettering and associated diagonal watermark lines throughout this exact architectural rendering. Reconstruct the obscured pixels. Preserve building geometry, floor count, windows, HOTEL BLUE MOON sign, facade, gold advertising panel, rooftop features, cars, street, landscape, viewpoint, lighting and colors faithfully. Keep the full original composition and aspect ratio. Single image output for the client's project gallery. Perform minimal localized cleanup, with the existing scene as the fixed reference.
+
+Prompt 5
+Use case: precise-object-edit. Edit target: the supplied square nighttime side-angle rendering. Remove the repeated translucent diagonal LOTUS lettering and associated diagonal watermark lines throughout this exact architectural rendering. Reconstruct the obscured pixels. Preserve building geometry, floor count, windows, HOTEL BLUE MOON sign, facade, gold advertising panel, rooftop features, cars, street, landscape, viewpoint, lighting and colors faithfully. Keep the full original composition and aspect ratio. Single image output for the client's project gallery. Perform minimal localized cleanup, with the existing scene as the fixed reference.
+
+Prompt 6
+Precise cleanup of this exact nighttime front building rendering. A small residual diagonal pale LOTUS watermark is still visible in the central dark glass windows, slightly right of the center, around the middle floors. Remove that residual overlay and any remaining repeated diagonal pale watermark lettering or lines. Preserve every other visible detail, exact building geometry, night illumination, HOTEL BLUE MOON sign, glass, interiors, cars, sidewalk, trees and composition. Use the supplied image as the fixed edit target, with minimal edits limited to residual watermark pixels.
+
+Contact: removed all three rotating background photographs and their image-toggle code. Left panel uses solid --sand beige with dark text; form tabs remain functional.

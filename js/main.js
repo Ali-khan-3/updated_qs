@@ -21,9 +21,10 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
   $$(".js-year").forEach((el) => (el.textContent = new Date().getFullYear()));
 
   /* ---------- forms work regardless of motion ---------- */
+  setupHeroVideo();
+  setupExpertise();
   setupForm();
   setupFootprint();
-  setupEthos();
   setupNavCurrent();
 
   if (!hasGsap || reduceMotion) {
@@ -165,75 +166,6 @@ const ENQUIRY_EMAIL = "qsrealty@outlook.com";
 
   whenReady(() => intro.play(), 5000); // slow connections still get the intro
   }
-
-  /* =========================================================
-     PINNED HORIZONTAL LIFECYCLE — created first so later
-     triggers account for its pin spacing
-     ========================================================= */
-  const mm = gsap.matchMedia();
-  mm.add("(min-width: 900px)", () => {
-    const pin = $(".services__pin");
-    if (!pin) return; // home page only
-    const intro = $(".services__intro");
-    const track = $(".services__track");
-    const cards = $$(".phase", track);
-    const last = cards[cards.length - 1];
-    const lastMedia = $(".phase__media", last);
-    const finale = $(".services__finale");
-    const PEEK = 18; // px of each earlier card left showing behind the one on top
-
-    // Deck of cards: the row slides left and each card parks over the heading as it
-    // arrives, PEEK px to the right of the one before, so the stack builds up like a
-    // fanned hand of cards. Card i travels `travel(i)` px and then stops.
-    // The row stops as soon as the Turnkey card is fully on screen (same margin on the right
-    // as the deck has on the left). Cards already stacked stay stacked, the rest hold their
-    // place in the row, and the Turnkey card opens up to full screen from there.
-    const deckLeft = () => intro.offsetLeft + parseFloat(getComputedStyle(intro).paddingLeft); // where the heading text starts
-    const stackTravel = (i) => track.offsetLeft + cards[i].offsetLeft - (deckLeft() + i * PEEK);
-    const rowStop = () => track.offsetLeft + last.offsetLeft + last.offsetWidth - (pin.offsetWidth - deckLeft());
-    const travel = (i) => Math.min(stackTravel(i), rowStop());
-    const deckEnd = travel(cards.length - 1);
-
-    // where the Turnkey image sits once the row stops — the finale opens up from exactly there
-    const finaleStart = () => {
-      const left = track.offsetLeft + last.offsetLeft + lastMedia.offsetLeft - travel(cards.length - 1);
-      const top = track.offsetTop + last.offsetTop + lastMedia.offsetTop;
-      const right = pin.offsetWidth - left - lastMedia.offsetWidth;
-      const bottom = pin.offsetHeight - top - lastMedia.offsetHeight;
-      return `inset(${top}px ${right}px ${bottom}px ${left}px round 14px)`;
-    };
-
-    // timeline units are 1000 scroll-px, so every card moves at the same speed and
-    // the row stays together until each card reaches its place in the deck
-    const tl = gsap.timeline({
-      defaults: { ease: "none" },
-      scrollTrigger: {
-        trigger: pin, start: "top top", end: () => "+=" + (travel(cards.length - 1) + window.innerHeight * 1.6),
-        pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true,
-      },
-    });
-    cards.forEach((card, i) => tl.to(card, { x: () => -travel(i), duration: travel(i) / 1000 }, 0));
-    // the deck takes the heading's place; fade the heading and copy as the first card arrives so
-    // nothing peeks out around the stack (the "(03) Our expertise" label stays)
-    const firstLanding = travel(0) / 1000;
-    tl.to([".services__intro .h2", ".services__lede", ".services__hint"], { autoAlpha: 0, duration: firstLanding * 0.4 }, firstLanding * 0.6);
-    tl.to(".services__progress span", { scaleX: 1, duration: deckEnd / 1000 }, 0)
-      .set(finale, { autoAlpha: 1 }, deckEnd / 1000)
-      .fromTo(finale, { clipPath: () => finaleStart() }, { clipPath: "inset(0px 0px 0px 0px round 0px)", duration: 1, ease: "power2.inOut" })
-      .fromTo(".services__finale > img", { scale: 1.12 }, { scale: 1, duration: 1, ease: "power2.out" }, "<")
-      .from(".services__finale-copy > *", { y: 40, autoAlpha: 0, duration: 0.4, stagger: 0.08, ease: "power2.out" }, "-=0.3")
-      .to({}, { duration: 0.5 }); // hold the full-screen frame for a beat before scrolling on
-
-    gsap.from(".services__intro .line > span", {
-      yPercent: 110, duration: 1.4, ease: "expo.out", stagger: 0.1,
-      scrollTrigger: { trigger: ".services", start: "top 70%" },
-    });
-  });
-  mm.add("(max-width: 899px)", () => {
-    $$(".phase").forEach((el) => {
-      gsap.from(el, { y: 50, autoAlpha: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 88%" } });
-    });
-  });
 
   /* =========================================================
      HERO SCROLL
@@ -509,6 +441,63 @@ function setupMenu(lenis) {
   document.addEventListener("keydown", (e) => e.key === "Escape" && close());
 }
 
+function setupExpertise() {
+  const journey = document.querySelector(".journey");
+  if (!journey) return;
+  const map = journey.querySelector(".journey__map");
+  const stops = Array.from(journey.querySelectorAll(".journey__stop"));
+  const panels = Array.from(journey.querySelectorAll(".journey__panel"));
+  const controls = journey.querySelector(".journey__controls");
+  const count = journey.querySelector(".journey__count");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let active = 0;
+
+  function selectStage(index, focusTab = false) {
+    active = (index + stops.length) % stops.length;
+    stops.forEach((stop, position) => {
+      const selected = position === active;
+      stop.setAttribute("aria-selected", String(selected));
+      stop.tabIndex = selected ? 0 : -1;
+      panels[position].hidden = !selected;
+    });
+    count.textContent = String(active + 1).padStart(2, "0") + " / " + String(stops.length).padStart(2, "0");
+    if (focusTab) stops[active].focus({ preventScroll: true });
+    const track = journey.querySelector(".journey__stops");
+    if (track.scrollWidth > track.clientWidth) {
+      track.scrollTo({
+        left: stops[active].offsetLeft - (track.clientWidth - stops[active].offsetWidth) / 2,
+        behavior: reducedMotion ? "instant" : "smooth",
+      });
+    }
+  }
+
+  stops.forEach((stop, index) => {
+    stop.addEventListener("click", () => selectStage(index));
+    stop.addEventListener("keydown", (event) => {
+      const destinations = {
+        ArrowRight: active + 1,
+        ArrowDown: active + 1,
+        ArrowLeft: active - 1,
+        ArrowUp: active - 1,
+        Home: 0,
+        End: stops.length - 1,
+      };
+      if (!(event.key in destinations)) return;
+      event.preventDefault();
+      selectStage(destinations[event.key], true);
+    });
+    panels[index].setAttribute("role", "tabpanel");
+    panels[index].setAttribute("aria-labelledby", stop.id);
+    panels[index].tabIndex = 0;
+  });
+  journey.querySelector("[data-journey-prev]").addEventListener("click", () => selectStage(active - 1));
+  journey.querySelector("[data-journey-next]").addEventListener("click", () => selectStage(active + 1));
+  map.hidden = false;
+  controls.hidden = false;
+  journey.classList.add("is-ready");
+  selectStage(0);
+}
+
 function setupHeader() {
   const header = document.querySelector(".header");
   let last = 0;
@@ -592,27 +581,6 @@ function setupNavCurrent() {
   update();
 }
 
-// Core values: whichever value crosses the middle of the screen becomes active, and the
-// sticky frame crossfades to its image. Hover does the same on desktop.
-function setupEthos() {
-  const values = Array.from(document.querySelectorAll(".ethos__value"));
-  const imgs = Array.from(document.querySelectorAll(".ethos__img"));
-  const num = document.querySelector(".js-ethos-num");
-  if (!values.length) return;
-  const activate = (i) => {
-    values.forEach((v, k) => v.classList.toggle("is-active", k === i));
-    imgs.forEach((im, k) => im.classList.toggle("is-active", k === i));
-    if (num) num.textContent = String(i + 1).padStart(2, "0");
-  };
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => { if (e.isIntersecting) activate(values.indexOf(e.target)); });
-  }, { rootMargin: "-48% 0px -48% 0px" });
-  values.forEach((v, i) => {
-    io.observe(v);
-    v.addEventListener("mouseenter", () => activate(i));
-  });
-}
-
 function setupFootprint() {
   const items = document.querySelectorAll(".footprint__areas li");
   const pins = document.querySelectorAll(".pin");
@@ -637,7 +605,6 @@ function setupForm() {
   const intro = panel.querySelector(".cform__intro");
   const tabs = Array.from(panel.querySelectorAll(".ctabs__tab"));
   const pill = panel.querySelector(".ctabs__pill");
-  const imgs = Array.from(document.querySelectorAll(".contact__img"));
   const tabField = form.querySelector('[name="tab"]');
 
   const TABS = {
@@ -654,7 +621,6 @@ function setupForm() {
       t.setAttribute("aria-selected", on);
       if (on) pill.style.transform = `translateX(${i * 100}%)`;
     });
-    imgs.forEach((im) => im.classList.toggle("is-active", im.dataset.tab === key));
     // show only this tab's fields; hidden fields are disabled so they stay out of the message
     form.querySelectorAll("[data-for]").forEach((el) => {
       const on = el.dataset.for.split(" ").includes(key);
@@ -729,4 +695,28 @@ function setupForm() {
     done.hidden = true; form.hidden = false; intro.hidden = false;
     setTab(tabField.value || "enquiry");
   });
+}
+
+function setupHeroVideo() {
+  const video = document.querySelector(".hero__video");
+  const button = document.querySelector(".hero__video-toggle");
+  if (!video || !button) return;
+  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const update = () => {
+    button.textContent = video.paused ? "Play background video" : "Pause background video";
+  };
+  const play = () => video.play().catch(update);
+  video.addEventListener("play", update);
+  video.addEventListener("pause", update);
+  video.addEventListener("error", () => { button.hidden = true; });
+  button.hidden = false;
+  button.addEventListener("click", () => {
+    if (video.paused) play();
+    else video.pause();
+  });
+  motion.addEventListener("change", (event) => {
+    if (event.matches) video.pause();
+  });
+  update();
+  if (!motion.matches) play();
 }
