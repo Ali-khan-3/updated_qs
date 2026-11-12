@@ -1,0 +1,9 @@
+# Local previews, QA captures, generated masters and recovery archives.
+/output/
+
+# Local tooling and credentials.
+/.vercel/
+/node_modules/
+.env
+.env.*
+!.env.example

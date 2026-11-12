@@ -1,0 +1,50 @@
+/* Small frame > panorama > editorial gallery. Native document flow is the fallback. */
+.project-story{position:relative;background:var(--paper,#f3f0e9);color:var(--ink,#292e2b);isolation:isolate}
+.story-stage{position:relative;padding:70px var(--gutter,4vw)}
+.story-intro{text-align:center;padding:50px 0 70px}
+.story-intro .eyebrow{justify-content:center;margin-bottom:25px}
+.story-intro h2{font:400 clamp(45px,5.5vw,94px)/1.02 var(--f-display);letter-spacing:-.04em}
+.story-intro em{color:var(--sage-deep,#5b6554)}
+.story-items{display:grid;gap:70px}
+.story-item{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:7vw;align-items:center}
+.story-frame{position:relative;margin:0;border-radius:16px;overflow:hidden;background:#e0ded6;aspect-ratio:4/5;min-width:0}
+.story-frame img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.story-thumb-hit{display:none;position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:inherit}
+.story-copy{min-width:0}
+.story-copy>.eyebrow{font-size:10px;letter-spacing:.14em}
+.story-copy h3{font:400 clamp(35px,3.5vw,60px)/1.06 var(--f-display);letter-spacing:-.03em;margin:20px 0}
+.story-description{font-size:14px;line-height:1.7;max-width:330px;color:var(--graphite,#62655e)}
+.story-copy .btn-arrow{font-size:11px;margin-top:20px}
+.story-cinema-caption,.story-chrome{display:none}
+.is-story-enhanced .story-stage{height:100svh;min-height:600px;padding:0;overflow:hidden}
+.is-story-enhanced .story-intro{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:3;padding:0;pointer-events:none}
+.is-story-enhanced .story-items,.is-story-enhanced .story-item{display:contents}
+.is-story-enhanced .story-frame{position:absolute;aspect-ratio:auto;transform-origin:center;z-index:1}
+.is-story-enhanced .story-thumb-hit:not(:disabled){display:block;cursor:pointer}
+.is-story-enhanced .story-thumb-hit:focus-visible{outline:3px solid var(--brand-gold);outline-offset:-5px}
+.is-story-enhanced .story-copy{position:absolute;left:71%;top:33%;width:25%;z-index:3}
+.is-story-enhanced .story-copy h3{font-size:clamp(32px,3.3vw,58px)}
+.is-story-enhanced .story-copy .story-description{font-size:13px;max-width:300px}
+.is-story-enhanced .story-copy .btn-arrow{font-size:10px;gap:12px}
+.is-story-enhanced .story-cinema-caption{display:block;position:absolute;left:6%;bottom:12%;margin:0;z-index:4;font:400 clamp(55px,6vw,110px)/.95 var(--f-display);color:#fff;letter-spacing:-.035em;pointer-events:none;text-shadow:0 2px 24px #0009}
+.is-story-enhanced .story-chrome{position:absolute;left:4%;right:4%;bottom:3%;z-index:5;display:flex;align-items:center;justify-content:space-between;font-size:9px;letter-spacing:.15em;text-transform:uppercase}
+.story-chrome nav{display:flex;gap:8px}
+.story-chrome button{width:44px;height:44px;border-radius:50%;border:1px solid #292e2b40;font-size:10px;letter-spacing:0;background:var(--paper)}
+.story-chrome button[aria-pressed=true]{background:var(--charcoal);color:var(--paper)}
+.project-mist{position:absolute;left:calc(-1 * var(--gutter));right:calc(-1 * var(--gutter));top:-15vh;bottom:-18vh;z-index:20;pointer-events:none;opacity:0;visibility:hidden;overflow:hidden}
+.project-mist__veil{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,#f3f0e900 10%,#f3f0e9de 42%,#f3f0e9 62%)}
+.project-mist__cloud{position:absolute;left:-8%;width:116%;height:58%;top:0;background:radial-gradient(ellipse at 12% 72%,#f3f0e9 0%,#f3f0e9cc 14%,transparent 36%),radial-gradient(ellipse at 42% 54%,#f3f0e9e6 0%,#f3f0e999 18%,transparent 44%),radial-gradient(ellipse at 78% 75%,#f3f0e9 0%,#f3f0e9cc 24%,transparent 48%);filter:blur(20px)}
+.project-mist__cloud--back{top:11%;transform:scaleX(-1);opacity:.8}
+.premium-home .projects:has(.project-story){padding-bottom:100px}
+.page-project .pj-gallery:has(.project-story){padding-bottom:0}
+@media(max-width:999px){
+.story-stage{padding:40px var(--gutter,22px) 70px}
+.story-item{grid-template-columns:1fr;gap:25px}
+.story-frame{max-height:650px;aspect-ratio:4/5}
+.story-intro{padding:35px 0 55px}
+.story-items{gap:60px}
+.story-copy h3{font-size:42px}
+.story-copy .eyebrow{font-size:10px}
+.story-cinema-caption{display:none}
+}
+@media(prefers-reduced-motion:reduce){.project-mist{display:none}.story-stage{height:auto}.story-thumb-hit{display:none}}

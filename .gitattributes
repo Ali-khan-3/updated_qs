@@ -1,1 +1,3 @@
 *.pdf binary
+# Preserve upstream formatting in pinned third-party distributions.
+js/vendor/*.js -whitespace

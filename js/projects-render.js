@@ -20,33 +20,14 @@
   /* ---------- home page: featured ventures ---------- */
   const featuredEl = document.querySelector('[data-render="featured"]');
   if (featuredEl) {
-    featuredEl.innerHTML = data.featured.map((p, i) => {
-      const m = meta(p);
-      return `
-        <a class="project" href="project.html?p=${esc(p.slug)}" data-cursor="View project" data-transition>
-          <div class="project__media"><img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" loading="lazy" decoding="async" /></div>
-          <div class="project__info">
-            <span class="tag tag--live">${esc(p.status)}</span>
-            <span class="project__index">${pad(i + 1)} / ${pad(data.featured.length)}</span>
-            <h3 class="project__title">${esc(p.name)}</h3>
-            <p class="project__summary">${esc(p.summary)}</p>
-            ${m ? `<dl class="project__meta">${m}</dl>` : ""}
-            <span class="btn-arrow"><span>View project</span>${arrow}</span>
-          </div>
-        </a>`;
-    }).join("");
-  }
-
-  /* ---------- home page: quick index beside the ongoing cards ---------- */
-  const indexEl = document.querySelector('[data-render="featured-index"]');
-  if (indexEl) {
-    indexEl.innerHTML = data.featured.map((p, i) => `
-      <li><a href="project.html?p=${esc(p.slug)}" data-transition>
-        <span class="ongoing__index-num">${pad(i + 1)}</span>
-        <span class="ongoing__index-name">${esc(p.name)}</span>
-        <span class="ongoing__index-loc">${esc(p.location || p.type || "")}</span>
-        ${arrow}
-      </a></li>`).join("");
+    const order = [0, 2, 1, 3].map(i => data.featured[i]).filter(Boolean);
+    featuredEl.innerHTML = order.map((p,i) => `
+      <article class="venture ${i%2 ? 'venture--reverse' : ''}" id="venture-${p.slug}" aria-label="${esc(p.name)}">
+        <div class="venture__copy"><div class="venture__heading"><p class="venture__location">${esc(p.location)}</p><h3>${esc(p.name)}</h3><span class="venture__status">${esc(p.status)}</span></div>
+        <div class="venture__bottom"><nav class="project-dots" aria-label="Select a development">${order.map((item,k)=>`<button type="button" data-project="${k}" aria-label="Show ${esc(item.name)}" aria-pressed="${k===i}">${pad(k+1)}</button>`).join("")}</nav>
+        <div class="venture__details"><p class="venture__summary">${esc(p.summary)}</p><a href="project.html?p=${esc(p.slug)}" class="btn-arrow"><span>View project</span>${arrow}</a></div></div></div>
+        <a class="venture__image" href="project.html?p=${esc(p.slug)}" aria-label="Explore ${esc(p.name)}"><img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" width="${p.imageWidth}" height="${p.imageHeight}" loading="lazy" decoding="async"><span class="venture__arrow" aria-hidden="true">↗</span></a>
+      </article>`).join("");
   }
 
   /* ---------- home page: completed works ---------- */
@@ -69,7 +50,7 @@
     const i = Math.max(0, data.featured.findIndex((p) => p.slug === slug));
     const p = data.featured[i];
     const next = data.featured[(i + 1) % data.featured.length];
-    const m = meta({ ...p, status: "" });
+    const m = meta(p);
     const enquiry = encodeURIComponent(`Hello QS Realty, I'd like to know more about ${p.name}.`);
 
     document.title = `${p.name} — QS Realty`;
@@ -98,16 +79,7 @@
       </section>
 
       <section class="pj-gallery" aria-label="Project renderings">
-        <div class="container"><h2 class="h2 pj-gallery__title">Project <em>views.</em></h2></div>
-        <div class="container pj-gallery__grid">
-          ${p.gallery.map((g, k) => `
-            <figure class="pj-gallery__item pj-gallery__item--${k + 1}">
-              <a href="${esc(g.src)}" target="_blank" rel="noopener" aria-label="Open ${esc(g.alt)} at full size (opens in a new tab)">
-                <img src="${esc(g.src)}" alt="${esc(g.alt)}" loading="lazy" decoding="async" width="${g.width}" height="${g.height}" />
-              </a>
-              <figcaption>${esc(g.alt)}</figcaption>
-            </figure>`).join("")}
-        </div>
+        <section class="project-story" data-project-story="${esc(p.slug)}" aria-label="Explore ${esc(p.name)} renderings"></section>
       </section>
 
       <section class="pj-process section section--dark" data-cursor-dark>
@@ -123,7 +95,7 @@
         </div>
       </section>
 
-      <section class="pj-cta section section--sage" data-cursor-dark>
+      <section id="project-enquiry" class="pj-cta section section--sage" data-cursor-dark>
         <div class="container pj-cta__inner">
           <h2 class="pj-cta__title reveal-lines"><span class="line"><span>Interested in</span></span><span class="line"><span><em>${esc(p.name)}?</em></span></span></h2>
           <div class="pj-cta__actions reveal-up">

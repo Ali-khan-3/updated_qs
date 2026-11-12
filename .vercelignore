@@ -1,0 +1,6 @@
+output/
+.git/
+.vercel/
+node_modules/
+.env
+.env.*

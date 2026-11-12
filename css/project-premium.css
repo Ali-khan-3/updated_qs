@@ -1,0 +1,17 @@
+html:has(.page-project){font-size:100%}
+.page-project{--paper:#f3f0e9;--bone:#f3f0e9;--charcoal:#292e2b;--ink:#292e2b;--sage:#747b67;--sand:#c6aa77;--brand-gold:#c6aa77;--gutter:clamp(22px,4.2vw,80px);--section-y:clamp(70px,8vw,140px);font-weight:400}
+.page-project .header{background:var(--charcoal);padding:18px var(--gutter)}
+.page-project .brand__monogram{width:50px}
+.page-project .brand__realty{font-size:21px}
+.page-project .header__nav{font-size:12px;gap:25px}
+.page-project .h2{font-weight:400;letter-spacing:-.035em}
+.page-project .pj-hero{background:var(--charcoal);padding-top:145px;padding-bottom:60px;min-height:100svh;gap:6vw}
+.page-project .pj-hero__title{font-size:clamp(55px,6vw,110px);letter-spacing:-.04em;font-weight:400}
+.page-project .pj-hero__media{border-radius:24px;overflow:hidden;background:#202522}
+.page-project .pj-hero__media img{max-height:76svh;width:100%;object-fit:contain}
+.page-project .pj-intro__lead{font-size:clamp(30px,3.1vw,52px)}
+.page-project .pj-intro__body{font-size:15px}
+.page-project .pj-process__list p{font-size:14px}
+.page-project .footer__word{color:var(--brand-gold);-webkit-text-stroke:0;font-family:var(--f-display);font-size:20vw}
+@media(max-width:999px){.page-project .header__nav{display:none}.page-project .menu-toggle{display:grid}}
+@media(max-width:600px){.page-project .pj-hero{padding-top:120px}.page-project .pj-hero__title{font-size:58px}.page-project .header{padding-block:15px}.page-project .brand__realty{font-size:17px}.page-project .brand__monogram{width:40px}}

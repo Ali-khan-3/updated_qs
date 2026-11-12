@@ -1,0 +1,26 @@
+{
+  "mode": "Built-in image_gen",
+  "purpose": "Illustrative brand photography based on the approved editorial previews. These images do not document completed QS Realty work.",
+  "assets": [
+    {
+      "file": "assets/img/editorial/architecture-worktable.webp",
+      "master": "output/backups/unused-images/assets/img/editorial/architecture-worktable.png",
+      "prompt": "Use case: photorealistic-natural. Create one premium architectural editorial photograph, landscape 3:2, for an Indian luxury construction and property company website. A carefully composed warm oak architect's worktable beside a tall window, ivory architectural floor plans with fine subtle pencil lines, one dark pencil and slim brass ruler, a few exquisite honed travertine and limestone sample blocks, and a small olive branch in a ceramic vase at the edge. Golden late afternoon sunlight with soft long window shadows. Quiet tactile refinement, pale warm ivory, rich tobacco wood, muted olive, brushed brass, natural realistic texture. Medium close composition at a gentle oblique angle, refined design magazine photography, crisp material detail, restrained objects. Full bleed photograph only, no typography, no logo, no website UI, no collage, no border, no people, no illegible large diagram text. This is illustrative brand photography, not a real completed project."
+    },
+    {
+      "file": "assets/img/editorial/travertine-entrance.webp",
+      "master": "output/backups/unused-images/assets/img/editorial/travertine-entrance.png",
+      "prompt": "Use case: photorealistic-natural. Create one premium architectural editorial photograph in portrait 4:5 for a luxury property website. Close-up composition of an exceptionally refined contemporary entryway: warm ivory travertine wall with authentic pores and fine horizontal stone grain on left, rich vertical walnut timber door on right, slim brushed brass vertical handle, gentle leafy sunlight shadows across the stone. At lower left a low travertine plinth with a small organic ceramic vase and a spare leafy branch. Moody warm afternoon sun and soft shadow, sophisticated calm, tangible material quality, natural photorealism, design magazine art direction. No wide room, no people, no words, no logo, no website UI, no frame. Full bleed single photograph, carefully composed architectural detail. Illustrative brand photography, not a real completed project."
+    },
+    {
+      "file": "assets/img/editorial/marine-drive-dusk.webp",
+      "master": "output/backups/unused-images/assets/img/editorial/marine-drive-dusk.png",
+      "prompt": "Use case: photorealistic-natural. One cinematic aerial editorial photograph of Mumbai Marine Drive Queen's Necklace and Nariman Point at late blue hour, landscape 16:9. Broad dark slate blue Arabian Sea occupies the entire left half with quiet water, sweeping graceful arc of palm-lined illuminated waterfront road from lower right toward the distant left-center, characteristic white Mumbai Art Deco apartment facades and dense skyline concentrated on the right, warm amber street lamps, muted peach twilight sky. Authentic Mumbai feel, refined realistic city detail, exceptional clarity, no motion blur. Calm luxury architectural magazine mood, natural restrained grading. Leave dark sea left for website text overlay but do NOT render any typography, logos, watermarks or website UI. AI illustrative city scene, not a specific property project."
+    },
+    {
+      "file": "assets/img/editorial/infrastructure-detail.webp",
+      "master": "output/backups/unused-images/assets/img/editorial/infrastructure-detail.png",
+      "prompt": "Use case: photorealistic-natural. One warm refined architectural editorial photograph for an infrastructure company, landscape 4:3. Sculptural modern concrete metro viaduct sweeping diagonally from the upper left foreground to right background, elegant engineered flared columns rising from below, restrained Mumbai apartment skyline and greenery in distance. Late afternoon sunlight grazing the smooth warm concrete and expressing structural precision. Low-angle architectural camera view with strong lines and impeccable realistic detail, sandstone beige and muted olive tones, sophisticated design magazine style. No people, vehicles not prominent, no words, logos, watermarks, borders or website UI. Illustrative infrastructure image, not a named completed project."
+    }
+  ]
+}
