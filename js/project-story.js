@@ -9,7 +9,7 @@
     const project = data.featured.find(p => p.slug === root.dataset.projectStory) || data.featured[0];
     const items = featured
       ? [0, 2, 1, 3].map(i => data.featured[i]).filter(Boolean).map(p => ({
-        image:p.image, alt:p.imageAlt, width:p.imageWidth, height:p.imageHeight, title:p.name,
+        image:p.image, mobileImage:p.mobileImage, alt:p.imageAlt, width:p.imageWidth, height:p.imageHeight, title:p.name,
         eyebrow:p.location, text:p.summary, link:"project.html?p=" + p.slug, cta:"Explore the project"
       }))
       : project.gallery.map((g,i) => ({
@@ -19,12 +19,35 @@
     root.innerHTML = `<div class="story-stage">
       <div class="story-intro"><p class="eyebrow">${featured ? "A closer look" : esc(project.name)}</p><h2>${featured ? "Every address.<br><em>A different perspective.</em>" : "Good design.<br><em>In every detail.</em>"}</h2></div>
       <div class="story-items">${items.map((item,i)=>`<article class="story-item">
-        <figure class="story-frame" data-story-frame="${i}"><img src="${esc(item.image)}" alt="${esc(item.alt)}" width="${item.width}" height="${item.height}" loading="lazy" decoding="async"><button type="button" class="story-thumb-hit" data-story-go="${i}" aria-label="Show ${esc(item.title)}"></button></figure>
+        <figure class="story-frame" data-story-frame="${i}"><picture>${item.mobileImage ? `<source media="(max-width: 999px)" srcset="${esc(item.mobileImage)}">` : ""}<img src="${esc(item.image)}" alt="${esc(item.alt)}" width="${item.width}" height="${item.height}" loading="lazy" decoding="async"></picture><button type="button" class="story-thumb-hit" data-story-go="${i}" aria-label="Show ${esc(item.title)}"></button></figure>
         <div class="story-copy"><p class="eyebrow">${esc(item.eyebrow)}</p><h3>${esc(item.title)}</h3><p class="story-description">${esc(item.text)}</p><a class="btn-arrow" href="${esc(item.link)}"${item.newTab ? ' target="_blank" rel="noopener"' : ""}><span>${item.cta}</span><span aria-hidden="true">↗</span></a></div>
       </article>`).join("")}</div>
       <p class="story-cinema-caption" aria-hidden="true">${featured ? "A different<br><em>point of view.</em>" : "Every detail.<br><em>Considered.</em>"}</p>
       <div class="story-chrome"><span>Scroll to discover</span><nav aria-label="Project image gallery">${items.map((item,i)=>`<button type="button" data-story-go="${i}" aria-label="Gallery view ${i+1}: ${esc(item.eyebrow)}" aria-pressed="${i===0}">${String(i+1).padStart(2,"0")}</button>`).join("")}</nav><span class="story-count">01 / ${String(items.length).padStart(2,"0")}</span></div>
     </div>`;
+    if (featured) {
+      const mobile = matchMedia('(max-width:999px)'), rail = root.querySelector('.story-items');
+      const slides = [...rail.children], controls = [...root.querySelectorAll('.story-chrome button')];
+      const reduced = matchMedia('(prefers-reduced-motion:reduce)');
+      root.addEventListener('click', event => {
+        const button = event.target.closest('.story-chrome button');
+        if (!mobile.matches || !button) return;
+        const slide = slides[+button.dataset.storyGo];
+        rail.scrollTo({left: rail.scrollLeft + slide.getBoundingClientRect().left - rail.getBoundingClientRect().left,
+          behavior: reduced.matches ? 'instant' : 'smooth'});
+      });
+      let pending = 0;
+      rail.addEventListener('scroll', () => {
+        if (!mobile.matches || pending) return;
+        pending = requestAnimationFrame(() => {
+          pending = 0;
+          const left = rail.getBoundingClientRect().left;
+          const index = slides.reduce((best, slide, i) => Math.abs(slide.getBoundingClientRect().left-left) < Math.abs(slides[best].getBoundingClientRect().left-left) ? i : best, 0);
+          controls.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
+          root.querySelector('.story-count').textContent = String(index+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+        });
+      }, {passive:true});
+    }
   });
   function mount(root, navigate) {
     const stage=root.querySelector(".story-stage"), frames=[...root.querySelectorAll(".story-frame")], copies=[...root.querySelectorAll(".story-copy")];

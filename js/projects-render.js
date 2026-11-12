@@ -26,7 +26,7 @@
         <div class="venture__copy"><div class="venture__heading"><p class="venture__location">${esc(p.location)}</p><h3>${esc(p.name)}</h3><span class="venture__status">${esc(p.status)}</span></div>
         <div class="venture__bottom"><nav class="project-dots" aria-label="Select a development">${order.map((item,k)=>`<button type="button" data-project="${k}" aria-label="Show ${esc(item.name)}" aria-pressed="${k===i}">${pad(k+1)}</button>`).join("")}</nav>
         <div class="venture__details"><p class="venture__summary">${esc(p.summary)}</p><a href="project.html?p=${esc(p.slug)}" class="btn-arrow"><span>View project</span>${arrow}</a></div></div></div>
-        <a class="venture__image" href="project.html?p=${esc(p.slug)}" aria-label="Explore ${esc(p.name)}"><img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" width="${p.imageWidth}" height="${p.imageHeight}" loading="lazy" decoding="async"><span class="venture__arrow" aria-hidden="true">↗</span></a>
+        <a class="venture__image" href="project.html?p=${esc(p.slug)}" aria-label="Explore ${esc(p.name)}"><picture>${p.mobileImage ? `<source media="(max-width: 999px)" srcset="${esc(p.mobileImage)}">` : ""}<img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" width="${p.imageWidth}" height="${p.imageHeight}" loading="lazy" decoding="async"></picture><span class="venture__arrow" aria-hidden="true">↗</span></a>
       </article>`).join("");
   }
 

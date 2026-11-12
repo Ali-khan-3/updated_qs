@@ -48,3 +48,17 @@
 .story-cinema-caption{display:none}
 }
 @media(prefers-reduced-motion:reduce){.project-mist{display:none}.story-stage{height:auto}.story-thumb-hit{display:none}}
+
+/* The homepage's second set of project images is a compact swipe gallery on mobile. */
+@media(max-width:999px){
+ .premium-home .story-stage{padding-block:35px 45px}
+ .premium-home .story-intro{padding:15px 0 30px}
+ .premium-home .story-items{display:grid;grid-auto-flow:column;grid-auto-columns:88%;grid-template-columns:none;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:12px}
+ .premium-home .story-item{display:flex;flex-direction:column;align-items:stretch;gap:16px;scroll-snap-align:start;min-width:0}
+ .premium-home .story-frame{aspect-ratio:5/4;flex:none}
+ .premium-home .story-copy h3{font-size:34px;margin:12px 0}
+ .premium-home .story-description{font-size:14px}
+ .premium-home .story-chrome{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;font-size:12px}
+ .premium-home .story-chrome>span:first-child{display:none}
+ .premium-home .story-chrome nav{gap:8px}
+}

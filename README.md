@@ -22,7 +22,7 @@ vercel.json           caching and security headers
 
 The homepage and project pages load pinned local copies of GSAP 3.12.5, ScrollTrigger and Lenis 1.1.13 from js/vendor/. If they fail to load, or the visitor has "reduce motion" turned on, the page falls back to a static layout.
 
-The homepage opens with a horizontal gold brand mark and asset-readiness progress, then a rounded video aperture expands into the hero. Media readiness waits at most 3.3 seconds; an 8.5-second overall fail-open timer prevents a stalled entry. Direct section links and restored scroll positions skip the intro. Desktop scroll uses a collage-to-inline-image sequence and four alternating project panels. Phones use native scrolling and stacked project cards; reduced motion uses static content and a paused hero. Project pages add a full-image-to-editorial gallery transition. The Structure / Full View 3D section is intentionally excluded.
+On desktop, the homepage opens with a horizontal gold brand mark and asset-readiness progress, then a rounded video aperture expands into the hero. Media readiness waits at most 3.3 seconds; an 8.5-second overall fail-open timer prevents a stalled entry. Direct section links and restored scroll positions skip the intro. Desktop scroll uses a collage-to-inline-image sequence and four alternating project panels. Phones use native scrolling, compact stacked project cards and a swipeable secondary gallery; reduced motion uses static content and a paused hero. Project pages add a full-image-to-editorial gallery transition. The Structure / Full View 3D section is intentionally excluded.
 
 ## Common edits
 
@@ -65,8 +65,19 @@ Desktop/mobile layout comparisons and interaction checks are saved in `output/pr
 
 ## Image cleanup
 
-Only the 26 referenced website images remain in `assets/`. The 42 unused images (20.8 MB), including original client references and PNG masters, were moved to `output/backups/unused-images/` with their original folder structure. Their paths and SHA-256 hashes are recorded in `output/previews/image-cleanup/moved-images.json`. Videos and existing output previews are unchanged. To restore an archived image, copy it back to its recorded original path.
+After that cleanup, 26 referenced website images remained in `assets/`. The 42 unused images (20.8 MB), including original client references and PNG masters, were moved to `output/backups/unused-images/` with their original folder structure. Their paths and SHA-256 hashes are recorded in `output/previews/image-cleanup/moved-images.json`. Videos and existing output previews are unchanged. To restore an archived image, copy it back to its recorded original path.
 
 ## Video cleanup
 
-The live hero retains `assets/client/video/hero-marine-drive-ai.mp4` for screens up to 767px wide and `hero-marine-drive-ai-4k.mp4` for larger screens, plus their shared poster. Five unused skyline/watermarked videos (39.3 MB) were moved to `output/backups/unused-videos/`. The archive preserves original paths; SHA-256 hashes and browser playback checks are in `output/previews/video-cleanup/`. Existing review recordings in `output/` are retained.
+The hero now serves `assets/client/video/hero-marine-drive-mobile.mp4` (1280 � 720, about 1.1 MB) at widths up to 999px or on coarse-pointer devices, covering phone landscape. Desktop keeps `hero-marine-drive-ai-4k.mp4`. The Full HD `hero-marine-drive-ai.mp4` is retained as the source master for future encodes, alongside the shared poster. Five unused skyline/watermarked videos (39.3 MB) were moved to `output/backups/unused-videos/`. The archive preserves original paths; SHA-256 hashes and browser playback checks are in `output/previews/video-cleanup/`. Existing review recordings in `output/` are retained.
+
+
+## Mobile refinement � November 2026
+
+Mobile entry uses a short CSS brand dissolve and never waits for video readiness. The menu starts below the header and scrolls internally on short screens. The homepage gallery supports native horizontal swiping and numbered controls below 1000px; all 20 completed works stay visible. Optional `mobileImage` fields in project data provide 720px WebP alternatives without changing desktop sources.
+
+Below 650px, expertise shows the model, a compact animated gold route, a horizontally scrollable stage selector and the selected description together. The sequence autoplays while the model is visible; manual selection, reduced motion and Data Saver pause automatic playback. Choosing a stage does not scroll the page, and the existing opaque-base crossfade is preserved. Below 768px, the contact form comes immediately after its heading, with office details and the map below it. Resize listeners restore the desktop DOM order.
+
+Verification artifacts are in `output/previews/mobile-fixes/`. The release uses asset cache version 20261113-2.
+
+Mobile sections 01 and 05 retain the desktop motion language: section 01 uses a shortened pinned collage-to-inline-image sequence (one viewport of scroll), and section 05 uses continuous gold-path travel with synchronized image crossfades. Native touch scrolling remains in control. Motion checks and screenshots are saved in `output/previews/mobile-motion/`.

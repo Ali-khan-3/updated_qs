@@ -24,6 +24,7 @@
   setupMenuAccess();
   setupMap();
   setupContactTabs();
+  setupMobileContact();
   $$(".js-counter").forEach(el => el.textContent = formatNumber(+el.dataset.to, el.dataset.format));
   $$('a[href^="#"]').forEach(link => link.addEventListener("click", event => {
     const hash = link.getAttribute("href");
@@ -95,8 +96,8 @@
       if (!entryDone) lenis.stop();
     }
     const storyCleanups = [];
+    collageMotion(!desktop);
     if (desktop) {
-      collageMotion();
       storyCleanups.push(projectMotion());
       window.QSProjectStory?.roots.forEach(root => storyCleanups.push(window.QSProjectStory.mount(root, moveTo)));
     } else {
@@ -131,6 +132,7 @@
         scrollTrigger: { trigger: ".footer", start: "top 95%", end: "bottom bottom", scrub: .7 } });
     }
     return () => {
+      $(".collage").classList.remove("is-mobile-motion");
       storyCleanups.forEach(cleanup => cleanup());
       if (tick) gsap.ticker.remove(tick);
       lenis?.destroy(); lenis = null;
@@ -141,13 +143,14 @@
       $$(".js-counter").forEach(el => el.textContent = formatNumber(+el.dataset.to, el.dataset.format));
     };
   });
-  function collageMotion() {
+  function collageMotion(mobile = false) {
     const stage = $(".collage"), main = $(".collage__main"), inline = $(".inline-image");
+    stage.classList.toggle("is-mobile-motion", mobile);
     const relative = axis => {
       const r = inline.getBoundingClientRect(), parent = stage.getBoundingClientRect();
       return axis === "x" ? r.left - parent.left : r.top - parent.top;
     };
-    gsap.timeline({ scrollTrigger: { trigger: stage, start: "top top", end: "+=180%", pin: true, scrub: .75, invalidateOnRefresh: true, anticipatePin: 1 } })
+    gsap.timeline({ scrollTrigger: { id: "about-collage", trigger: stage, start: mobile ? "top 84px" : "top top", end: mobile ? "+=100%" : "+=180%", pin: true, scrub: mobile ? .35 : .75, invalidateOnRefresh: true, anticipatePin: 1 } })
       .to(".collage__heading, .collage__caption", { y: -65, autoAlpha: 0, duration: .55 }, .15)
       .to(".collage__satellite--one, .collage__satellite--three", { xPercent: -180, rotation: -12, autoAlpha: 0, duration: .8 }, .1)
       .to(".collage__satellite--two", { xPercent: 180, rotation: 14, autoAlpha: 0, duration: .8 }, .1)
@@ -246,6 +249,11 @@
   }
   function playEntry() {
     if (motion.matches || scrollY > 80 || location.hash) return releaseEntry();
+    // Phone visitors can use the page immediately; media never gates interaction.
+    // Keep a brief brand dissolve without the desktop's blocking cinematic intro.
+    if (matchMedia("(max-width: 999px), (pointer: coarse)").matches) {
+      return releaseEntry();
+    }
     document.body.classList.add("is-loading");
     $("main").inert = true; $(".header").inert = true;
     lenis?.stop();
@@ -355,9 +363,25 @@
       });
     });
   }
+  function setupMobileContact() {
+    const query = matchMedia("(max-width: 767px)"), contact = $("#contact");
+    const details = $(".contact__details"), map = $(".contact__map");
+    const office = document.createElement("div");
+    office.className = "contact__office";
+    const anchors = [details, map].map(el => {
+      const anchor = document.createComment("Office position on desktop");
+      el.before(anchor); return anchor;
+    });
+    const arrange = () => {
+      if (query.matches) { office.append(details, map); contact.append(office); }
+      else { [details, map].forEach((el, i) => anchors[i].after(el)); office.remove(); }
+      if (window.ScrollTrigger && entryDone) ScrollTrigger.refresh();
+    };
+    arrange(); query.addEventListener("change", arrange);
+  }
   function setupVideo() {
     const button = $(".hero__video-toggle");
-    let userPaused = motion.matches, visible = true;
+    let userPaused = motion.matches || navigator.connection?.saveData === true, visible = true;
     const update = () => { button.textContent = video.paused ? "Play background video" : "Pause background video"; button.setAttribute("aria-pressed", String(!video.paused)); };
     const play = () => video.play().catch(update);
     button.hidden = false;

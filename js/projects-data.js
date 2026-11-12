@@ -12,6 +12,7 @@ window.QS_PROJECTS = {
   featured: [
     {
       "slug": "pinnacle",
+      "mobileImage": "assets/client/projects/mobile/pinnacle.webp",
       "name": "Pinnacle",
       "status": "Taking shape",
       "type": "",
@@ -37,6 +38,7 @@ window.QS_PROJECTS = {
     },
     {
       "slug": "bismillah-restaurant",
+      "mobileImage": "assets/client/projects/mobile/bismillah-restaurant.webp",
       "name": "Bismillah Restaurant",
       "status": "Taking shape",
       "type": "Commercial building",
@@ -86,6 +88,7 @@ window.QS_PROJECTS = {
     },
     {
       "slug": "land-avenue",
+      "mobileImage": "assets/client/projects/mobile/land-avenue.webp",
       "name": "Lands Avenue",
       "status": "Taking shape",
       "type": "",
@@ -111,6 +114,7 @@ window.QS_PROJECTS = {
     },
     {
       "slug": "carter-road",
+      "mobileImage": "assets/client/projects/mobile/carter-road.webp",
       "name": "Makka Heights",
       "status": "Taking shape",
       "type": "Residential",
