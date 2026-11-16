@@ -658,3 +658,9 @@ html:has(.premium-home){font-size:100%;scroll-behavior:auto}
 /* The section after the hero rises over it as a rounded sheet */
 .premium-home .intro{position:relative;z-index:2;margin-top:-34px;border-radius:34px 34px 0 0}
 .premium-home .hero__video{will-change:transform}
+/* Contact form: callback select, styled like the other fields */
+.field--select select{width:100%;appearance:none;-webkit-appearance:none;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2362655e' stroke-width='1.6'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 2px bottom .7rem/18px;border:0;border-bottom:1px solid #292e2b45;border-radius:0;color:var(--ink);font:inherit;font-size:var(--fs-md);padding:1.4rem 28px .6rem 0;min-height:3.05rem;outline:none;cursor:pointer;transition:border-color .4s}
+.field--select select:focus{border-color:var(--sage-deep)}
+.field--select select:focus-visible{outline:2px solid var(--sage-deep);outline-offset:4px}
+.field--select label{transform:translateY(-1.25rem) scale(.6);letter-spacing:.16em;text-transform:uppercase}
+.field--select option{color:#292e2b;background:#f3f0e9}

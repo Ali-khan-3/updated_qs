@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="preload" as="image" href="assets/client/video/hero-family-home-poster.jpg" />
   <link rel="stylesheet" href="css/style.css?v=20261113-2" />
-<link rel="stylesheet" href="css/premium.css?v=20261116-16" />
+<link rel="stylesheet" href="css/premium.css?v=20261116-17" />
   <link rel="stylesheet" href="css/expertise-atelier.css?v=20261113-2">
   <link rel="stylesheet" href="css/project-story.css?v=20261113-2" />
 </head>
@@ -392,16 +392,9 @@
         </div>
       </div>
 
-      <!-- right: tabbed form -->
+      <!-- right: enquiry form -->
       <div class="contact__panel">
         <div class="contact__panel-inner">
-          <div class="ctabs" role="tablist" aria-label="How can we help?">
-            <span class="ctabs__pill" aria-hidden="true"></span>
-            <button type="button" class="ctabs__tab is-active" role="tab" aria-selected="true" data-tab="enquiry">Project enquiry</button>
-            <button type="button" class="ctabs__tab" role="tab" aria-selected="false" data-tab="callback">Callback</button>
-            <button type="button" class="ctabs__tab" role="tab" aria-selected="false" data-tab="visit">Site visit</button>
-          </div>
-
           <div class="cform__intro">
             <h3 class="cform__heading" data-copy="heading">Tell us about your project.</h3>
             <p class="cform__sub" data-copy="sub">Share a few details and our team will come back with a clear next step.</p>
@@ -414,29 +407,28 @@
               <div class="field"><input id="f-phone" name="phone" type="tel" placeholder=" " required autocomplete="tel" /><label for="f-phone">Phone / WhatsApp</label></div>
             </div>
 
-            <div class="field" data-for="enquiry"><input id="f-email" name="email" type="email" placeholder=" " autocomplete="email" /><label for="f-email">Email (optional)</label></div>
+            <div class="field"><input id="f-email" name="email" type="email" placeholder=" " autocomplete="email" /><label for="f-email">Email (optional)</label></div>
 
-            <fieldset class="chips" data-for="enquiry">
+            <fieldset class="chips">
               <legend>I'm interested in</legend>
               <label><input type="radio" name="type" value="Redevelopment" checked /><span>Redevelopment</span></label>
               <label><input type="radio" name="type" value="Construction" /><span>Construction</span></label>
               <label><input type="radio" name="type" value="Joint Development" /><span>Joint Development</span></label>
+              <label><input type="radio" name="type" value="Investor" /><span>Investor</span></label>
               <label><input type="radio" name="type" value="Other" /><span>Other</span></label>
             </fieldset>
 
-            <fieldset class="chips" data-for="callback" hidden>
-              <legend>Best time to call</legend>
-              <label><input type="radio" name="time" value="Morning (10am–1pm)" checked /><span>Morning</span></label>
-              <label><input type="radio" name="time" value="Afternoon (1pm–5pm)" /><span>Afternoon</span></label>
-              <label><input type="radio" name="time" value="Evening (5pm–8pm)" /><span>Evening</span></label>
-            </fieldset>
-
-            <div class="cform__row" data-for="visit" hidden>
-              <div class="field"><input id="f-site" name="site" type="text" placeholder=" " /><label for="f-site">Site / society &amp; area</label></div>
-              <div class="field field--date"><input id="f-date" name="date" type="date" placeholder=" " /><label for="f-date">Preferred date</label></div>
+            <div class="field field--select">
+              <select id="f-callback" name="callback">
+                <option value="">No callback needed</option>
+                <option value="Morning (10am–1pm)">Call me in the morning (10am–1pm)</option>
+                <option value="Afternoon (1pm–5pm)">Call me in the afternoon (1pm–5pm)</option>
+                <option value="Evening (5pm–8pm)">Call me in the evening (5pm–8pm)</option>
+              </select>
+              <label for="f-callback">Request a callback</label>
             </div>
 
-            <div class="field field--area" data-for="enquiry visit"><textarea id="f-msg" name="message" rows="2" placeholder=" "></textarea><label for="f-msg">Anything we should know?</label></div>
+            <div class="field field--area"><textarea id="f-msg" name="message" rows="2" placeholder=" "></textarea><label for="f-msg">Anything we should know?</label></div>
 
             <label class="consent">
               <input type="checkbox" name="consent" required />
@@ -502,8 +494,8 @@
   <script src="js/projects-data.js?v=20261113-2"></script>
   <script src="js/projects-render.js?v=20261116-1"></script>
   <script src="js/project-story.js?v=20261113-2"></script>
-  <script src="js/main.js?v=20261116-3"></script>
-<script src="js/premium.js?v=20261116-15"></script>
+  <script src="js/main.js?v=20261116-4"></script>
+<script src="js/premium.js?v=20261116-16"></script>
 <script src="js/expertise-atelier.js?v=20261113-2"></script>
 </body>
 </html>

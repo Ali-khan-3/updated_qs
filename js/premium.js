@@ -23,7 +23,6 @@
   setupVideo();
   setupMenuAccess();
   setupMap();
-  setupContactTabs();
   setupMobileContact();
   $$(".js-counter").forEach(el => el.textContent = formatNumber(+el.dataset.to, el.dataset.format));
   $$('a[href^="#"]').forEach(link => link.addEventListener("click", event => {
@@ -400,18 +399,6 @@
       button.addEventListener("mouseenter", () => select(item.dataset.pin));
     });
     select("kurla");
-  }
-  function setupContactTabs() {
-    const tabs = $$(".ctabs__tab");
-    tabs.forEach((tab, index) => {
-      tab.tabIndex = index ? -1 : 0;
-      tab.addEventListener("click", () => tabs.forEach(t => t.tabIndex = t === tab ? 0 : -1));
-      tab.addEventListener("keydown", e => {
-        const map = { ArrowRight: (index + 1) % tabs.length, ArrowLeft: (index + tabs.length - 1) % tabs.length, Home: 0, End: tabs.length - 1 };
-        if (!(e.key in map)) return;
-        e.preventDefault(); tabs[map[e.key]].click(); tabs[map[e.key]].focus();
-      });
-    });
   }
   function setupMobileContact() {
     const query = matchMedia("(max-width: 767px)"), contact = $("#contact");

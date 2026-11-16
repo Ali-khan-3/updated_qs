@@ -419,41 +419,6 @@ function setupForm() {
   const panel = form.closest(".contact__panel-inner");
   const done = panel.querySelector(".cform__done");
   const intro = panel.querySelector(".cform__intro");
-  const tabs = Array.from(panel.querySelectorAll(".ctabs__tab"));
-  const pill = panel.querySelector(".ctabs__pill");
-  const tabField = form.querySelector('[name="tab"]');
-
-  const TABS = {
-    enquiry: { label: "Project enquiry", submit: "Send on WhatsApp", heading: "Tell us about your project.", sub: "Share a few details and our team will come back with a clear next step." },
-    callback: { label: "Callback request", submit: "Request a callback", heading: "Prefer to talk it through?", sub: "Leave your number and a good time — a project head will call you back." },
-    visit: { label: "Site visit request", submit: "Book a site visit", heading: "Let's walk the site together.", sub: "Tell us where and when — we'll confirm the visit on WhatsApp." },
-  };
-
-  const setTab = (key) => {
-    tabField.value = key;
-    tabs.forEach((t, i) => {
-      const on = t.dataset.tab === key;
-      t.classList.toggle("is-active", on);
-      t.setAttribute("aria-selected", on);
-      if (on) pill.style.transform = `translateX(${i * 100}%)`;
-    });
-    // show only this tab's fields; hidden fields are disabled so they stay out of the message
-    form.querySelectorAll("[data-for]").forEach((el) => {
-      const on = el.dataset.for.split(" ").includes(key);
-      el.hidden = !on;
-      el.querySelectorAll("input, textarea").forEach((inp) => (inp.disabled = !on));
-    });
-    intro.querySelector('[data-copy="heading"]').textContent = TABS[key].heading;
-    intro.querySelector('[data-copy="sub"]').textContent = TABS[key].sub;
-    intro.classList.remove("is-swapping"); void intro.offsetWidth; intro.classList.add("is-swapping");
-    form.querySelector(".cform__submit-label").textContent = TABS[key].submit;
-    note.textContent = "";
-  };
-  tabs.forEach((t) => t.addEventListener("click", () => {
-    done.hidden = true; form.hidden = false; intro.hidden = false;
-    setTab(t.dataset.tab);
-  }));
-  setTab("enquiry");
 
   const collect = () => {
     const data = new FormData(form);
@@ -471,21 +436,19 @@ function setupForm() {
     if (!consent.checked) { note.textContent = "Please tick the box so we can contact you."; return null; }
     note.textContent = "";
 
-    const tab = val("tab");
+    const label = "Project enquiry";
     const lines = [
       "Hello QS Realty,",
       "",
-      `Request: ${TABS[tab].label}`,
+      `Request: ${label}`,
       `Name: ${name}`,
       `Phone: ${phone}`,
       val("email") && `Email: ${val("email")}`,
-      tab === "enquiry" && `Interested in: ${val("type")}`,
-      tab === "callback" && `Best time to call: ${val("time")}`,
-      val("site") && `Site: ${val("site")}`,
-      val("date") && `Preferred date: ${val("date")}`,
+      `Interested in: ${val("type")}`,
+      val("callback") && `Please call me back: ${val("callback")}`,
       val("message") && `\n${val("message")}`,
     ].filter((l) => l !== false && l !== "");
-    return { name, label: TABS[tab].label, text: lines.join("\n") };
+    return { name, label, text: lines.join("\n") };
   };
 
   const showDone = () => { form.hidden = true; intro.hidden = true; done.hidden = false; };
@@ -509,6 +472,6 @@ function setupForm() {
   done.querySelector(".js-again").addEventListener("click", () => {
     form.reset();
     done.hidden = true; form.hidden = false; intro.hidden = false;
-    setTab(tabField.value || "enquiry");
+    note.textContent = "";
   });
 }
