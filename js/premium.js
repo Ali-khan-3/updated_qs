@@ -319,7 +319,7 @@
         // Keep semicircular ends throughout. Grow beyond the viewport so the
         // capsule fills the hero before its mask is cleared, without squaring off.
         .fromTo(".hero__media", { clipPath: "inset(35% 39% 35% 39% round 9999px)" },
-          { clipPath: "inset(-50% -50% -50% -50% round 9999px)", duration: 1.65, ease: "power3.inOut", immediateRender: false }, "-=.15")
+          { clipPath: "inset(-50% -50% -50% -50% round 9999px)", duration: 1.65, ease: "power3.inOut", immediateRender: false }, "<") // starts with the logo's flight
         .to(".hero__title .line > span", { yPercent: 0, duration: 1.15, stagger: .12, ease: "power3.out" }, "-=.75")
         .to(".hero__bottom", { opacity: 1, y: 0, duration: .8 }, "-=.8")
         .to(".header", { opacity: 1, duration: .35 }, "-=.3")
