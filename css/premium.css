@@ -633,3 +633,11 @@ html:has(.premium-home){font-size:100%;scroll-behavior:auto}
 .about-statement h2{font:300 clamp(34px,5vw,90px)/1.2 var(--f-body);letter-spacing:-.035em;color:var(--ink)}
 .about-statement em{font-family:var(--f-display);font-size:1.12em;color:var(--sage-deep)}
 @media (max-width:760px){.about-statement{min-height:0;padding-top:64px;padding-bottom:56px}.about-statement h2{font-size:clamp(30px,8.4vw,46px);line-height:1.22}}
+
+/* Projects: details always left, image always right. In the pinned version every card
+   sits in the left slot and the script offsets the images to the right. */
+@media(min-width:768px){.venture--reverse .venture__image{grid-column:2}.venture--reverse .venture__copy{grid-column:1}}
+.venture__copy[data-href]{cursor:pointer}
+.project-portal{position:static;background:transparent;overflow:visible;border-radius:0;isolation:auto;z-index:auto;will-change:auto;width:auto}
+.project-portal__slide{inset:0 auto 0 0;width:calc(50% - 6px);border-radius:var(--photo-radius);will-change:transform,clip-path}
+.project-stage.is-enhanced .venture .venture__copy{left:0;will-change:transform,clip-path}

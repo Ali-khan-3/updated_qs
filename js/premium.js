@@ -108,8 +108,6 @@
         });
       });
     }
-    gsap.to(".project-marquee > div", { xPercent: -17, ease: "none",
-      scrollTrigger: { trigger: ".project-marquee", start: "top bottom", end: "bottom top", scrub: .8 } });
     gsap.to(".hero__title", { y: desktop ? -65 : -25, opacity: .35, ease: "none",
       scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: .5 } });
     const revealTargets = $$(".about-copy > *, .numbers .section-head, .stat, .team__intro, .leader, .counsel, .crew, .partner__title, .partner__lede, .partner__grid li, .ethos-heading, .ethos__vision, .ethos__value, .footprint__copy, .footprint__map, .verticals__intro, .vertical-card, .contact__visual-inner, .contact__panel-inner");
@@ -162,7 +160,7 @@
     const copies = cards.map(card => $(".venture__copy", card));
     const portal = document.createElement("div");
     portal.className = "project-portal";
-    // A single clipped window changes sides; its full-size images roll vertically.
+    // Each project image is cloned into its own rounded card for the pinned conveyor.
     // Original card images stay in the document for mobile and reduced motion.
     const slides = cards.map(card => {
       const slide = $(".venture__image", card).cloneNode(true);
@@ -175,9 +173,9 @@
     deck.append(portal);
     stage.classList.add("is-enhanced");
     let refreshFrame = 0;
-    const step = 2.15, hold = .8, travel = 1.25;
+    const step = 1.75, hold = .53, travel = 1.25; // cards start moving almost as soon as a scroll begins
     const exitStart = (cards.length - 1) * step + 1.35;
-    const side = i => i % 2 ? 0 : deck.clientWidth / 2 + 6;
+    const right = () => deck.clientWidth / 2 + 6; // x offset of the right-hand slot
     const switches = cards.slice(1).map((_, i) => i * step + hold + .12 + travel / 2);
     const update = time => {
       if (!stage.classList.contains("is-enhanced")) return;
@@ -190,38 +188,70 @@
         slide.setAttribute("aria-hidden", String(i !== index));
       });
     };
+    const resync = () => {
+      if (!lenis) return;
+      lenis.start();
+      lenis.scrollTo(scrollY, { immediate: true, force: true });
+    };
     setActive(0, true);
-    gsap.set(copies, { yPercent: 105, autoAlpha: 0 });
-    gsap.set(copies[0], { yPercent: 0, autoAlpha: 1 });
-    gsap.set(slides, { yPercent: -100 });
-    gsap.set(slides[0], { yPercent: 0 });
-    gsap.set(portal, { x: side(0) });
+    gsap.set(copies, { autoAlpha: 0, zIndex: 1 });
+    gsap.set(copies[0], { autoAlpha: 1, zIndex: 2 });
+    gsap.set(slides, { zIndex: 1 });
+    gsap.set(slides[0], { x: right(), zIndex: 2 });
     const timeline = gsap.timeline({
       onUpdate() { update(this.time()); },
       scrollTrigger: {
         id: "project-cards", trigger: stage, start: "top 90px",
         end: () => "+=" + innerHeight * (cards.length * 1.25 + 1),
-        pin: true, scrub: .42, anticipatePin: 1, invalidateOnRefresh: true,
+        pin: true, scrub: .3, anticipatePin: 1, invalidateOnRefresh: true,
+        // One scroll gesture carries the section to the next project, like the reference.
+        // Input is held while the glide runs, then the smooth-scroller is re-synced to where it landed.
+        snap: { snapTo: "labelsDirectional", duration: { min: 1, max: 1.2 }, delay: .02, ease: "sine.inOut", inertia: false,
+          onStart: () => lenis?.stop(), onComplete: resync, onInterrupt: resync },
         onRefresh: self => {
           cancelAnimationFrame(refreshFrame);
           refreshFrame = requestAnimationFrame(() => update(self.animation.time()));
         }
       }
     });
-    // Function-based endpoints recompute the horizontal travel after resizing.
-    timeline.fromTo(portal, { x: () => side(0) }, { x: () => side(0), duration: hold }, 0);
-    timeline.addLabel("project-0", .4);
+    // Card motion (function-based x values recompute after resizing).
+    const HIDDEN = "inset(0% 0% 100% 0%)", SHOWN = "inset(0% 0% 0% 0%)";
+    const ease = "sine.inOut", at0 = .12;
+    // Preview switch while the client decides: add ?cards=swap to the URL for the side-swapping version.
+    const swapSides = new URLSearchParams(location.search).get("cards") === "swap";
+    timeline.to({}, { duration: hold }, 0).addLabel("start", 0).addLabel("project-0", .4);
     cards.slice(1).forEach((card, offset) => {
-      const i = offset + 1, at = offset * step + hold;
-      const incomingText = $$(":scope > *", copies[i]);
+      const i = offset + 1, at = offset * step + hold, t = at + at0;
+      if (swapSides) {
+        // Exact reference motion: the right-hand card slides across to the left while its
+        // content wipes to the next project, the old left card recedes, a new card rises on the right.
+        const [movers, risers] = i % 2 ? [slides, copies] : [copies, slides];
+        const leaver = risers[i - 1], from = movers[i - 1], to = movers[i], riser = risers[i];
+        timeline.set(copies[i], { autoAlpha: 1 }, at + .1)
+          .set(leaver, { zIndex: 1 }, at + .1).set(riser, { zIndex: 2 }, at + .1)
+          .set(from, { zIndex: 3 }, at + .1).set(to, { zIndex: 4 }, at + .1)
+          .to(leaver, { scale: .9, autoAlpha: 0, duration: travel, ease }, t)
+          .fromTo(from, { x: right }, { x: 0, duration: travel, ease, immediateRender: false }, t)
+          .fromTo(to, { x: right, clipPath: HIDDEN }, { x: 0, clipPath: SHOWN, duration: travel, ease }, t)
+          .fromTo(riser, { x: right, yPercent: 108 }, { x: right, yPercent: 0, duration: travel, ease }, t)
+          .set(from, { autoAlpha: 0 }, t + travel + .02);
+        if (i % 2) timeline.to($("img", from), { scale: 1.3, duration: travel, ease }, t)
+          .fromTo($("img", to), { scale: 1.5 }, { scale: 1, duration: travel, ease }, t);
+        timeline.addLabel("project-" + i, i * step + .4);
+        return;
+      }
+      // Fixed sides: details on the left, image on the right. Same tweens as the reference:
+      // the old details card recedes (scale .9 + fade) while the next one rises from below;
+      // the next image wipes in from the top inside the image frame, settling from a zoom.
       timeline.set(copies[i], { autoAlpha: 1 }, at + .1)
-        .fromTo(copies[i], { yPercent: 105 }, { yPercent: 0, duration: travel, ease: "power3.inOut", immediateRender: false }, at + .12)
-        .fromTo(portal, { x: () => side(i - 1) }, { x: () => side(i), duration: travel, ease: "power3.inOut", immediateRender: false }, at + .12)
-        .to(slides[i - 1], { yPercent: 100, duration: travel, ease: "power3.inOut" }, at + .12)
-        .fromTo(slides[i], { yPercent: -100 }, { yPercent: 0, duration: travel, ease: "power3.inOut", immediateRender: false }, at + .12)
-        .fromTo(incomingText, { y: 20, opacity: 0, filter: "blur(4px)" },
-          { y: 0, opacity: 1, filter: "blur(0px)", duration: .45, stagger: .035, immediateRender: false }, at + .92)
-        .set(copies[i - 1], { autoAlpha: 0 }, at + travel + .15)
+        .set([slides[i - 1], copies[i - 1]], { zIndex: 1 }, at + .1)
+        .set([slides[i], copies[i]], { zIndex: 2 }, at + .1)
+        .to(copies[i - 1], { scale: .9, autoAlpha: 0, duration: travel, ease }, t)
+        .fromTo(copies[i], { yPercent: 108 }, { yPercent: 0, duration: travel, ease }, t)
+        .to($("img", slides[i - 1]), { scale: 1.3, duration: travel, ease }, t)
+        .fromTo(slides[i], { x: right, clipPath: HIDDEN }, { x: right, clipPath: SHOWN, duration: travel, ease }, t)
+        .fromTo($("img", slides[i]), { scale: 1.5 }, { scale: 1, duration: travel, ease }, t)
+        .set(slides[i - 1], { autoAlpha: 0 }, t + travel + .02)
         .addLabel("project-" + i, i * step + .4);
     });
     // The recording ends with a soft upward white veil into the next section.
@@ -233,7 +263,8 @@
       .fromTo($(".project-mist__veil", stage), { backgroundColor: "rgba(243,240,233,0)" },
         { backgroundColor: "rgba(243,240,233,1)", duration: .55 }, exitStart + .95)
       .to(".project-dots", { autoAlpha: 0, duration: .4 }, exitStart + .15)
-      .to({}, { duration: .15 });
+      .to({}, { duration: .15 })
+      .addLabel("end");
     projectTrigger = timeline.scrollTrigger;
     update(0);
     return () => {
