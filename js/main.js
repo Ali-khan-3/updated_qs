@@ -7,6 +7,16 @@
 const WHATSAPP_NUMBER = "919820299042";
 const ENQUIRY_EMAIL = "qsrealty@outlook.com";
 
+// A refresh always starts at the top of the page instead of the previous scroll position.
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
+  if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+  window.scrollTo(0, 0);
+  // ScrollTrigger keeps its own memory of the last scroll position; clear it too.
+  window.ScrollTrigger?.clearScrollMemory?.("manual");
+  window.addEventListener("load", () => window.scrollTo(0, 0), { once: true });
+}
+
 (() => {
   "use strict";
   // Homepage motion is owned by premium.js; shared form helpers remain below.
@@ -312,7 +322,6 @@ function setupHeader() {
   const header = document.querySelector(".header");
   if (!header) return;
   const hero = document.querySelector(".hero");
-  let last = window.scrollY;
 
   function updateHeader() {
     const y = window.scrollY;
@@ -320,10 +329,8 @@ function setupHeader() {
       ? hero.getBoundingClientRect().bottom <= header.offsetHeight
       : y > 40;
     header.classList.toggle("is-scrolled", beyondHero);
-    const hide = beyondHero && y > last && y > window.innerHeight * 0.6
-      && !document.body.classList.contains("menu-open");
-    header.classList.toggle("is-hidden", hide);
-    last = y;
+    // The header stays visible everywhere; it no longer hides while scrolling down.
+    header.classList.remove("is-hidden");
   }
 
   window.addEventListener("scroll", updateHeader, { passive: true });
