@@ -132,7 +132,7 @@
         scrollTrigger: { trigger: ".footer", start: "top 95%", end: "bottom bottom", scrub: .7 } });
     }
     return () => {
-      $(".collage").classList.remove("is-mobile-motion");
+      $(".collage")?.classList.remove("is-mobile-motion");
       storyCleanups.forEach(cleanup => cleanup());
       if (tick) gsap.ticker.remove(tick);
       lenis?.destroy(); lenis = null;
@@ -144,19 +144,16 @@
     };
   });
   function collageMotion(mobile = false) {
-    const stage = $(".collage"), main = $(".collage__main"), inline = $(".inline-image");
+    const stage = $(".collage"), main = $(".collage__main");
+    if (!stage) return;
     stage.classList.toggle("is-mobile-motion", mobile);
-    const relative = axis => {
-      const r = inline.getBoundingClientRect(), parent = stage.getBoundingClientRect();
-      return axis === "x" ? r.left - parent.left : r.top - parent.top;
-    };
     gsap.timeline({ scrollTrigger: { id: "about-collage", trigger: stage, start: mobile ? "top 84px" : "top top", end: mobile ? "+=100%" : "+=180%", pin: true, scrub: mobile ? .35 : .75, invalidateOnRefresh: true, anticipatePin: 1 } })
-      .to(".collage__heading, .collage__caption", { y: -65, autoAlpha: 0, duration: .55 }, .15)
+      .to(".collage__caption", { y: -65, autoAlpha: 0, duration: .55 }, .15)
       .to(".collage__satellite--one, .collage__satellite--three", { xPercent: -180, rotation: -12, autoAlpha: 0, duration: .8 }, .1)
       .to(".collage__satellite--two", { xPercent: 180, rotation: 14, autoAlpha: 0, duration: .8 }, .1)
       .to(main, { left: "3%", top: "5%", width: "94%", height: "90%", borderRadius: 12, duration: 1.1, ease: "power2.inOut" }, 0)
       .to({}, { duration: .3 })
-      .to(main, { left: () => relative("x"), top: () => relative("y"), width: () => inline.offsetWidth, height: () => inline.offsetHeight, borderRadius: 4, duration: 1.2, ease: "power2.inOut" }, 1.4)
+      .to(main, { autoAlpha: 0, scale: .96, duration: .9, ease: "power2.inOut" }, 1.4)
       .fromTo(".collage__statement", { autoAlpha: 0, y: 15 }, { autoAlpha: 1, y: 0, duration: .8 }, 1.8)
       .to({}, { duration: .45 });
   }
