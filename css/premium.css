@@ -644,3 +644,10 @@ html:has(.premium-home){font-size:100%;scroll-behavior:auto}
 /* Keep the completed-buildings heading above the project exit veil, which overhangs the stage */
 .premium-home .completed{position:relative;z-index:21}
 .project-mist{display:none}
+/* Hero: "Scroll to explore" takes the bottom-right spot the video button used to have */
+@media(min-width:768px){.premium-home .scroll-cue{grid-column:3;justify-self:end}}
+@media(max-width:767px){.premium-home .scroll-cue{grid-column:2;justify-self:end}}
+/* Loader logo is moved by script into the header */
+.premium-home .preloader__mark{will-change:transform}
+/* Header logo uses the same lettering as the loader logo (large R, small capitals) */
+.premium-home .brand__realty{text-transform:none}

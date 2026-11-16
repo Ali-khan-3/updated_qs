@@ -278,8 +278,27 @@
     lenis?.stop();
     gsap.set(".hero__media", { clipPath: "inset(35% 39% 35% 39% round 9999px)" });
     gsap.set(".hero__title .line > span", { yPercent: 115 });
-    gsap.set(".hero__bottom, .header", { opacity: 0, y: 16 });
+    gsap.set(".hero__bottom", { opacity: 0, y: 16 });
+    gsap.set(".header", { opacity: 0 });
     gsap.fromTo(".preloader__mark", { filter: "blur(12px)", opacity: .3 }, { filter: "blur(0px)", opacity: 1, duration: 1.15, ease: "power2.out" });
+    const mark = $(".preloader__mark"), brandBox = $(".header .brand__box");
+    const markMono = $(".brand__monogram", mark), markText = $(".preloader__realty", mark);
+    const headMono = $(".brand__monogram", brandBox), headText = $(".brand__realty", brandBox);
+    // Give the loader logo the header logo's exact proportions, so the two overlap perfectly on landing.
+    const ratio = headMono.offsetWidth / markMono.offsetWidth, headStyle = getComputedStyle(headText);
+    if (ratio > 0) {
+      mark.style.gap = parseFloat(getComputedStyle(brandBox).columnGap) / ratio + "px";
+      markText.style.fontSize = parseFloat(headStyle.fontSize) / ratio + "px";
+      markText.style.letterSpacing = parseFloat(headStyle.letterSpacing) / ratio + "px";
+    }
+    let flightCache;
+    const flight = () => {
+      if (flightCache) return flightCache;
+      const box = mark.getBoundingClientRect(), from = markMono.getBoundingClientRect(), to = headMono.getBoundingClientRect();
+      const scale = to.width / from.width;
+      // Land the monogram exactly on the header monogram (transform origin is the logo's top-left).
+      return flightCache = { scale, x: to.left - box.left - (from.left - box.left) * scale, y: to.top - box.top - (from.top - box.top) * scale };
+    };
     const progress = { value: 0 };
     const paint = () => {
       $(".js-count").textContent = Math.round(progress.value);
@@ -291,14 +310,20 @@
       started = true;
       entryTimeline = gsap.timeline({ onComplete: releaseEntry })
         .to(progress, { value: 100, duration: .35, onUpdate: paint })
-        .to(".preloader__lockup", { opacity: 0, y: -15, duration: .45 }, "+=.15")
-        .to(loader, { autoAlpha: 0, duration: .45 }, "-=.15")
+        .to(".preloader__rule, .preloader__caption, .preloader__count", { opacity: 0, y: -10, duration: .45 }, "+=.15")
+        .to(".preloader__surface", { autoAlpha: 0, duration: .45 }, "-=.15")
+        .to(loader, { backgroundColor: "rgba(42,43,40,0)", duration: .45 }, "<")
+        // The loader logo travels to the header logo's exact place and size, then hands over to it.
+        .to(mark, { x: () => flight().x, y: () => flight().y, scale: () => flight().scale,
+          transformOrigin: "0 0", duration: 1.65, ease: "power3.inOut" }, "<")
         // Keep semicircular ends throughout. Grow beyond the viewport so the
         // capsule fills the hero before its mask is cleared, without squaring off.
         .fromTo(".hero__media", { clipPath: "inset(35% 39% 35% 39% round 9999px)" },
           { clipPath: "inset(-50% -50% -50% -50% round 9999px)", duration: 1.65, ease: "power3.inOut", immediateRender: false }, "-=.15")
         .to(".hero__title .line > span", { yPercent: 0, duration: 1.15, stagger: .12, ease: "power3.out" }, "-=.75")
-        .to(".hero__bottom, .header", { opacity: 1, y: 0, duration: .8, stagger: .06 }, "-=.8");
+        .to(".hero__bottom", { opacity: 1, y: 0, duration: .8 }, "-=.8")
+        .to(".header", { opacity: 1, duration: .35 }, "-=.3")
+        .to(loader, { autoAlpha: 0, duration: .25 });
     };
     const poster = new Image(); poster.src = video.poster;
     const imageReady = poster.decode ? poster.decode().catch(() => {}) : Promise.resolve();
@@ -399,14 +424,8 @@
     arrange(); query.addEventListener("change", arrange);
   }
   function setupVideo() {
-    const button = $(".hero__video-toggle");
     let userPaused = motion.matches || navigator.connection?.saveData === true, visible = true;
-    const update = () => { button.textContent = video.paused ? "Play background video" : "Pause background video"; button.setAttribute("aria-pressed", String(!video.paused)); };
-    const play = () => video.play().catch(update);
-    button.hidden = false;
-    button.addEventListener("click", () => { userPaused = !video.paused; if (userPaused) video.pause(); else play(); });
-    video.addEventListener("play", update); video.addEventListener("pause", update);
-    video.addEventListener("error", () => button.hidden = true);
+    const play = () => video.play().catch(() => {});
     new IntersectionObserver(entries => {
       visible = entries[0].isIntersecting;
       if (!visible) video.pause();
@@ -414,6 +433,6 @@
     }, { threshold: .05 }).observe(hero);
     document.addEventListener("visibilitychange", () => { if (document.hidden) video.pause(); else if (visible && !userPaused) play(); });
     motion.addEventListener("change", e => { if (e.matches) { userPaused = true; video.pause(); } });
-    update(); if (!userPaused) play();
+    if (!userPaused) play();
   }
 })();
