@@ -37,7 +37,9 @@
   dots.forEach(dot => dot.addEventListener("click", () => {
     const i = Number(dot.dataset.project);
     if (projectTrigger) {
-      moveTo(projectTrigger.labelToScroll("project-" + i), { offset: 0, duration: .85 });
+      const steps = Math.max(1, Math.abs(i - activeProject));
+      moveTo(projectTrigger.labelToScroll("project-" + i), { offset: 0, duration: Math.min(1.5 * steps, 3.2),
+        easing: t => -(Math.cos(Math.PI * t) - 1) / 2 });
     } else moveTo(cards[i]);
   }));
   function setActive(index, enhanced) {
@@ -108,7 +110,11 @@
         });
       });
     }
-    gsap.to(".hero__title", { y: desktop ? -65 : -25, opacity: .35, ease: "none",
+    // Leaving the hero: its text lifts and fades out before the header reaches it,
+    // and the video drifts slightly while the next section slides over it.
+    gsap.to(".hero__title, .hero__bottom > *", { y: desktop ? -70 : -30, autoAlpha: 0, ease: "none",
+      scrollTrigger: { trigger: hero, start: "top top", end: desktop ? "50% top" : "60% top", scrub: .5 } });
+    gsap.to(".hero__video", { yPercent: 10, scale: 1.06, ease: "none",
       scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: .5 } });
     const revealTargets = $$(".about-copy > *, .numbers .section-head, .stat, .team__intro, .leader, .counsel, .crew, .partner__title, .partner__lede, .partner__grid li, .ethos-heading, .ethos__vision, .ethos__value, .footprint__copy, .footprint__map, .verticals__intro, .vertical-card, .contact__visual-inner, .contact__panel-inner");
     revealTargets.forEach(el => {

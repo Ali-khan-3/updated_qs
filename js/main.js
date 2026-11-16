@@ -329,6 +329,7 @@ function setupHeader() {
       ? hero.getBoundingClientRect().bottom <= header.offsetHeight
       : y > 40;
     header.classList.toggle("is-scrolled", beyondHero);
+    header.classList.toggle("is-top", y < 60); // large hero logo only while at the very top
     // The header stays visible everywhere; it no longer hides while scrolling down.
     header.classList.remove("is-hidden");
   }

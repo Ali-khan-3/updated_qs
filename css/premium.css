@@ -653,5 +653,8 @@ html:has(.premium-home){font-size:100%;scroll-behavior:auto}
 .premium-home .brand__realty{text-transform:none}
 /* Over the hero the header logo is shown at the loader logo size; it returns to normal once the page is scrolled */
 .premium-home .header .brand__monogram{transition:width .45s var(--ease-out)}.premium-home .header .brand__realty{transition:font-size .45s var(--ease-out)}.premium-home .header .brand__box{transition:gap .45s var(--ease-out)}
-@media(min-width:1101px){.premium-home .header:not(.is-scrolled) .brand__monogram{width:84px}.premium-home .header:not(.is-scrolled) .brand__realty{font-size:35px}.premium-home .header:not(.is-scrolled) .brand__box{gap:16px}}
-@media(min-width:1400px){.premium-home .header:not(.is-scrolled) .brand__monogram{width:110px}.premium-home .header:not(.is-scrolled) .brand__realty{font-size:46px}.premium-home .header:not(.is-scrolled) .brand__box{gap:20px}}
+@media(min-width:1101px){.premium-home .header.is-top .brand__monogram{width:84px}.premium-home .header.is-top .brand__realty{font-size:35px}.premium-home .header.is-top .brand__box{gap:16px}}
+@media(min-width:1400px){.premium-home .header.is-top .brand__monogram{width:110px}.premium-home .header.is-top .brand__realty{font-size:46px}.premium-home .header.is-top .brand__box{gap:20px}}
+/* The section after the hero rises over it as a rounded sheet */
+.premium-home .intro{position:relative;z-index:2;margin-top:-34px;border-radius:34px 34px 0 0}
+.premium-home .hero__video{will-change:transform}
