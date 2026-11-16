@@ -174,7 +174,7 @@
     stage.classList.add("is-enhanced");
     let refreshFrame = 0;
     const step = 1.75, hold = .53, travel = 1.25; // cards start moving almost as soon as a scroll begins
-    const exitStart = (cards.length - 1) * step + 1.35;
+    const exitStart = (cards.length - 1) * step + .9;
     const right = () => deck.clientWidth / 2 + 6; // x offset of the right-hand slot
     const switches = cards.slice(1).map((_, i) => i * step + hold + .12 + travel / 2);
     const update = time => {
@@ -202,7 +202,7 @@
       onUpdate() { update(this.time()); },
       scrollTrigger: {
         id: "project-cards", trigger: stage, start: "top 90px",
-        end: () => "+=" + innerHeight * (cards.length * 1.25 + 1),
+        end: () => "+=" + innerHeight * cards.length * 1.25,
         pin: true, scrub: .3, anticipatePin: 1, invalidateOnRefresh: true,
         // One scroll gesture carries the section to the next project, like the reference.
         // Input is held while the glide runs, then the smooth-scroller is re-synced to where it landed.
@@ -254,17 +254,8 @@
         .set(slides[i - 1], { autoAlpha: 0 }, t + travel + .02)
         .addLabel("project-" + i, i * step + .4);
     });
-    // The recording ends with a soft upward white veil into the next section.
-    timeline.to({}, { duration: .4 }, exitStart - .4)
-      .fromTo($(".project-mist", stage), { autoAlpha: 0, yPercent: 100 },
-        { autoAlpha: 1, yPercent: 0, duration: 1.45, ease: "none" }, exitStart)
-      .fromTo($$(".project-mist__cloud", stage), { xPercent: -3 },
-        { xPercent: 3, duration: 1.45, ease: "none" }, exitStart)
-      .fromTo($(".project-mist__veil", stage), { backgroundColor: "rgba(243,240,233,0)" },
-        { backgroundColor: "rgba(243,240,233,1)", duration: .55 }, exitStart + .95)
-      .to(".project-dots", { autoAlpha: 0, duration: .4 }, exitStart + .15)
-      .to({}, { duration: .15 })
-      .addLabel("end");
+        // The last project simply scrolls away into the completed-buildings list.
+    timeline.to({}, { duration: .4 }, exitStart - .4).addLabel("end");
     projectTrigger = timeline.scrollTrigger;
     update(0);
     return () => {
