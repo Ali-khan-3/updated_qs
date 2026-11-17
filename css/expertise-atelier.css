@@ -32,6 +32,9 @@
 .atelier-route__track,.atelier-route__gold{fill:none;stroke-width:1.35;vector-effect:non-scaling-stroke;stroke-linecap:round}
 .atelier-route__track{stroke:#99713265}.atelier-route__gold{stroke:#b17619;filter:drop-shadow(0 0 3px #d8a84660)}
 .atelier-route__light{fill:#fff4c1;stroke:#c38d26;stroke-width:1;filter:drop-shadow(0 0 5px #dba644)}
+/* Loop from stage 08 to 01: the drawn line and its light fade out, then start again. */
+.atelier-route__gold,.atelier-route__light{transition:opacity .4s ease}
+.atelier-route.is-looping .atelier-route__gold,.atelier-route.is-looping .atelier-route__light{opacity:0}
 .atelier-node{position:absolute;left:var(--node-x);top:var(--node-y);transform:translate(-50%,-50%);width:44px;height:44px;display:grid;place-items:center;pointer-events:auto;color:#805516}
 .atelier-node>span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;border:1px solid #fff6df;background:#977027;font:400 16px var(--f-display);color:#fff9e9;box-shadow:0 2px 6px #59401e25;transition:background .35s,box-shadow .35s}
 .atelier-node:hover>span,.atelier-node.is-active>span{background:#a76b0d;box-shadow:0 0 0 5px #e9b95028,0 0 21px #d8a63c96}
@@ -50,10 +53,8 @@
 .atelier-footer>p{font:italic 18px var(--f-display)}
 .atelier-controls{display:flex;align-items:center;gap:20px;font-size:10px;color:#76511b}.atelier-controls[hidden]{display:none}
 .atelier-count{letter-spacing:.13em;font-variant-numeric:tabular-nums}
-.atelier-play{display:flex;align-items:center;gap:9px;min-height:44px;padding:0 4px;font-size:10px;color:inherit}
-.atelier-play>span:first-child{display:grid;place-items:center;width:27px;height:27px;border:1px solid #aa834b70;border-radius:50%}
-.atelier-play[hidden]{display:none}.atelier-note{font-size:9px;letter-spacing:.03em;color:#6d6353}
-.atelier-tab:focus-visible,.atelier-node:focus-visible,.atelier-play:focus-visible,.atelier-cta:focus-visible{outline:2px solid #8e5d18;outline-offset:3px}
+.atelier-note{font-size:9px;letter-spacing:.03em;color:#6d6353}
+.atelier-tab:focus-visible,.atelier-node:focus-visible,.atelier-cta:focus-visible{outline:2px solid #8e5d18;outline-offset:3px}
 .expertise-atelier:not(.is-ready) .atelier-canvas{height:auto;min-height:900px}.expertise-atelier:not(.is-ready) .atelier-copy{padding-bottom:40px}
 @media(min-width:1000px) and (max-width:1200px){.atelier-copy{width:43%}.atelier-copy h2{font-size:86px}.atelier-panel h3{font-size:28px}.atelier-panel__summary{font-size:25px}.atelier-tab{grid-template-columns:33px 22px 1fr;gap:8px;padding:16px 13px}.atelier-tab__icon{width:32px;height:32px}.atelier-tab__title{font-size:22px}.atelier-tab__progress{left:76px;right:13px}}
 @media(max-width:999px){
@@ -143,7 +144,7 @@
  .atelier-panel__summary{font-size:23px;margin-bottom:10px}
  .atelier-panel__description{font-size:14px;line-height:1.55;max-width:40ch}
  .expertise-atelier.is-ready .atelier-cta{order:6;align-self:flex-start;border-radius:999px;font-size:21px}
- .atelier-controls,.atelier-play,.atelier-note{font-size:12px}
+ .atelier-controls,.atelier-note{font-size:12px}
  .atelier-footer{margin-top:18px}
 }
 

@@ -3,7 +3,7 @@
  'use strict';
  const root=document.querySelector('.expertise-atelier');if(!root)return;
  const tabs=[...root.querySelectorAll('[data-atelier-step]')],nodes=[...root.querySelectorAll('[data-atelier-node]')],panels=[...root.querySelectorAll('.atelier-panel')],images=[...root.querySelectorAll('.atelier-scene')];
- const rail=root.querySelector('.atelier-tabs'),canvas=root.querySelector('.atelier-canvas'),play=root.querySelector('.atelier-play');
+ const rail=root.querySelector('.atelier-tabs'),canvas=root.querySelector('.atelier-canvas');
  const track=root.querySelector('.atelier-route__track'),gold=root.querySelector('.atelier-route__gold'),light=root.querySelector('.atelier-route__light');
  const reduced=matchMedia('(prefers-reduced-motion: reduce)'),mobile=matchMedia('(max-width:649px)');
  const desktopPoints=[[180,516],[290,486],[400,492],[510,516],[620,510],[730,498],[840,480],[940,456]];
@@ -21,8 +21,11 @@
   nodes.forEach((node,i)=>{node.style.setProperty('--node-x',`${points[i][0]/10}%`);node.style.setProperty('--node-y',`${points[i][1]/height*100}%`);});
  }
  buildRoute();
- let active=0,direction=1,elapsed=0,last=0,raf=0,visible=false,paused=reduced.matches||navigator.connection?.saveData===true;
- const duration=2400;
+ // The sequence always runs. It only stays still for reduced-motion or data-saver visitors,
+ // and holds while someone is moving through the stages with the keyboard.
+ const saveData=navigator.connection?.saveData===true;
+ let active=0,elapsed=0,last=0,raf=0,visible=false,off=reduced.matches||saveData,keyboard=false;
+ const duration=2400,chosenDuration=6000;let dwell=duration; // a stage someone picked stays a little longer
  const visual=root.querySelector('.atelier-visual'),sceneStack=document.createElement('div');
  sceneStack.className='atelier-scene-stack';sceneStack.setAttribute('aria-hidden','true');visual.append(sceneStack);
  let sceneRequest=0;
@@ -51,11 +54,10 @@
   sceneLoader.disconnect();
  },{rootMargin:'700px 0px'});
  sceneLoader.observe(root);
- function path(value){const a=Math.floor(value),b=Math.min(7,a+1),distance=stops[a]+(stops[b]-stops[a])*(value-a);gold.style.strokeDashoffset=String(length-distance);const p=track.getPointAtLength(distance);light.setAttribute('cx',p.x);light.setAttribute('cy',p.y);}
+ function path(value){const a=Math.min(7,Math.floor(value)),b=Math.min(7,a+1),distance=stops[a]+(stops[b]-stops[a])*(value-a);gold.style.strokeDashoffset=String(length-distance);const p=track.getPointAtLength(distance);light.setAttribute('cx',p.x);light.setAttribute('cy',p.y);}
  function select(index,manual=false){
-  active=index;elapsed=0;
-  if(manual||index===0)direction=1;
-  if(index===7)direction=-1;
+  active=index;elapsed=0;dwell=manual?chosenDuration:duration;
+  route.classList.remove('is-looping');
   tabs.forEach((t,i)=>{t.classList.toggle('is-active',i===index);t.setAttribute('aria-selected',String(i===index));t.tabIndex=i===index?0:-1;t.style.removeProperty('--atelier-progress');});
   if(mobile.matches)rail.scrollTo({left:rail.scrollLeft+tabs[index].getBoundingClientRect().left-rail.getBoundingClientRect().left,behavior:reduced.matches?'instant':'smooth'});
   nodes.forEach((n,i)=>{n.classList.toggle('is-active',i===index);n.setAttribute('aria-pressed',String(i===index));});
@@ -63,35 +65,37 @@
   images.forEach((img,i)=>{img.classList.toggle('is-active',i===index);img.setAttribute('aria-hidden',String(i!==index));});
   blendScene(index);
   root.querySelector('[data-atelier-count]').textContent=String(index+1).padStart(2,'0');path(index);
-  if(manual){paused=true;stop();sync();}
+  if(manual)resume();
  }
- function sync(){play.querySelector('[data-atelier-play-label]').textContent=paused?'Play sequence':'Pause sequence';play.querySelector('[data-atelier-symbol]').textContent=paused?'▶':'Ⅱ';play.setAttribute('aria-label',`${paused?'Play':'Pause'} expertise sequence`);play.hidden=reduced.matches;}
  function stop(){cancelAnimationFrame(raf);raf=0;last=0;}
  function frame(time){
-  if(paused||!visible||document.hidden||reduced.matches){stop();return;}
+  if(off||keyboard||!visible||document.hidden){stop();return;}
   if(last)elapsed+=Math.min(time-last,100);last=time;
   // Arrive, change the scene, and immediately continue along the next segment.
-  // Retrace the open route at either end rather than jumping from 08 to 01.
-  if(elapsed>=duration){const remainder=elapsed-duration;select(active+direction);elapsed=remainder;}
-  tabs[active].style.setProperty('--atelier-progress',String(elapsed/duration));
-  path(active+direction*Math.min(1,elapsed/duration));
+  // After stage 08 the sequence starts again at 01: the gold line fades out, then redraws from the start.
+  if(elapsed>=dwell){const remainder=elapsed-dwell;select((active+1)%8);elapsed=remainder;}
+  tabs[active].style.setProperty('--atelier-progress',String(elapsed/dwell));
+  route.classList.toggle('is-looping',active===7&&dwell-elapsed<450);
+  path(active+Math.min(1,elapsed/dwell));
   raf=requestAnimationFrame(frame);
  }
- function resume(){if(!raf&&!paused&&visible&&!document.hidden&&!reduced.matches)raf=requestAnimationFrame(frame);}
+ function resume(){if(!raf&&!off&&!keyboard&&visible&&!document.hidden)raf=requestAnimationFrame(frame);}
  rail.setAttribute('role','tablist');
- rail.addEventListener('pointerdown',()=>{if(mobile.matches){paused=true;stop();sync();}},{passive:true});
+ // Touching the stage strip on a phone restarts the current stage's time, so it does not move under the finger.
+ rail.addEventListener('pointerdown',()=>{if(mobile.matches){elapsed=0;dwell=chosenDuration;}},{passive:true});
  tabs.forEach((tab,i)=>{
   tab.setAttribute('role','tab');panels[i].setAttribute('role','tabpanel');
   tab.addEventListener('click',()=>select(i,true));
   tab.addEventListener('keydown',e=>{const columns=getComputedStyle(rail).gridTemplateColumns.split(' ').length;const next={ArrowRight:(i+1)%8,ArrowLeft:(i+7)%8,ArrowDown:(i+columns)%8,ArrowUp:(i-columns+8)%8,Home:0,End:7};if(!(e.key in next))return;e.preventDefault();select(next[e.key],true);tabs[next[e.key]].focus();});
  });
  nodes.forEach((n,i)=>n.addEventListener('click',()=>select(i,true)));
- play.addEventListener('click',()=>{paused=!paused;sync();if(paused)stop();else resume();});
- root.addEventListener('focusin',e=>{if(e.target!==play){paused=true;stop();sync();}});
+ // Keyboard focus inside the section holds the sequence so the focused stage is not swapped away; it continues when focus leaves.
+ root.addEventListener('focusin',e=>{keyboard=e.target.matches(':focus-visible');if(keyboard)stop();else resume();});
+ root.addEventListener('focusout',e=>{if(!root.contains(e.relatedTarget)){keyboard=false;resume();}});
  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)resume();else stop();},{threshold:.2}).observe(visual);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else resume();});
- function preferences(){paused=true;stop();sync();if(reduced.matches)blendScene(active);}
- reduced.addEventListener('change',preferences);mobile.addEventListener('change',preferences);
+ function preferences(){off=reduced.matches||saveData;if(off){stop();route.classList.remove('is-looping');tabs[active].style.removeProperty('--atelier-progress');path(active);if(reduced.matches)blendScene(active);}else resume();}
+ reduced.addEventListener('change',preferences);
  // Keep the image, stage choices and description together on phones.
  const railAnchor=document.createComment('Desktop stage navigation');rail.before(railAnchor);
  const mobileHint=document.createElement('p');mobileHint.className='atelier-mobile-hint';mobileHint.textContent='Swipe to explore all eight stages';
@@ -101,5 +105,5 @@
   else{railAnchor.after(rail);mobileHint.remove();rail.scrollLeft=0;}
  }
  mobile.addEventListener('change',arrangeMobile);arrangeMobile();
- root.classList.add('is-ready');root.querySelector('.atelier-controls').hidden=false;root.querySelector('.atelier-route').hidden=false;select(0);sync();
+ root.classList.add('is-ready');root.querySelector('.atelier-controls').hidden=false;root.querySelector('.atelier-route').hidden=false;select(0);
 })();
