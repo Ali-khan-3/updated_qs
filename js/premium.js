@@ -23,6 +23,7 @@
   setupVideo();
   setupMenuAccess();
   setupMap();
+  setupUpcoming();
   setupMobileContact();
   $$(".js-counter").forEach(el => el.textContent = formatNumber(+el.dataset.to, el.dataset.format));
   $$('a[href^="#"]').forEach(link => link.addEventListener("click", event => {
@@ -401,6 +402,30 @@
     modes.forEach(button => button.addEventListener("click", () => setMode(button.dataset.mapMode)));
     switcher.hidden = false;
     select("kurla");
+  }
+  // Verticals that are not live yet answer with a short message over their picture.
+  function setupUpcoming() {
+    const cards = $$(".vertical-card.is-upcoming");
+    let timer;
+    const close = () => {
+      clearTimeout(timer);
+      cards.forEach(card => { card.classList.remove("is-open"); $(".vertical-card__soon", card).setAttribute("aria-expanded", "false"); });
+    };
+    cards.forEach(card => {
+      const button = $(".vertical-card__soon", card), notice = $(".vertical-card__notice", card);
+      button.addEventListener("click", () => {
+        const wasOpen = card.classList.contains("is-open");
+        close();
+        if (wasOpen) return;
+        // Filled on demand so screen readers announce it when it appears.
+        notice.innerHTML = "<b>Upcoming</b><strong></strong><span>This vertical is in progress. Details will be shared here soon.</span>";
+        $("strong", notice).textContent = card.dataset.upcoming;
+        card.classList.add("is-open");
+        button.setAttribute("aria-expanded", "true");
+        timer = setTimeout(close, 6000);
+      });
+    });
+    document.addEventListener("keydown", event => { if (event.key === "Escape") close(); });
   }
   function setupMobileContact() {
     const query = matchMedia("(max-width: 767px)"), contact = $("#contact");

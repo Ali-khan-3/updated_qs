@@ -516,14 +516,6 @@ em { font-style: italic; }
 .group-header { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); padding-top: var(--s-3); padding-bottom: var(--s-3); border-bottom: 1px solid var(--line); }
 .group-header__logo { width: 4.25rem; height: 4.25rem; object-fit: contain; }
 .group-overview { padding: var(--section-y) 0; }
-.group-overview .h2 { margin: var(--s-2) 0 var(--s-4); }
-.group-overview__companies { display: grid; gap: var(--s-2); }
-.group-overview__companies h2 { font-family: var(--f-display); font-size: var(--fs-xl); font-weight: 400; padding: var(--s-3) 0; border-top: 1px solid var(--line); scroll-margin-top: 2rem; }
-.group-overview__companies h2:target { color: var(--sage-deep); }
-.group-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-3); padding-top: var(--s-4); padding-bottom: var(--s-4); }
-@media (min-width: 700px) {
-  .group-overview__companies { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); }
-}
 
 /* =========================================================
    CLIENTS

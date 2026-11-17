@@ -706,3 +706,49 @@ html:has(.premium-home){font-size:100%;scroll-behavior:auto}
  .fmap__mode button{min-width:54px}
  .fmap__credit{right:14px;bottom:9px;font-size:8px}
 }
+/* Verticals: QS Infra and Aura-Viva Designs are upcoming. The whole card is the button; the message appears over the image. */
+.vertical-card.is-upcoming{position:relative;cursor:pointer}
+.vertical-card.is-upcoming .vertical-card__image{position:relative}
+.vertical-card__soon{align-self:center;margin:0 18px 0 0;padding:9px 14px;border:1px solid #e4cda28c;border-radius:30px;font:400 10px/1 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:#e4cda2;white-space:nowrap;transition:background .3s,color .3s,border-color .3s}
+.vertical-card__soon::after{content:"";position:absolute;inset:0}
+.vertical-card.is-upcoming:hover .vertical-card__soon,.vertical-card.is-open .vertical-card__soon{background:#e4cda2;border-color:#e4cda2;color:#2b2f25}
+.vertical-card__soon:focus-visible{outline:2px solid #e4cda2;outline-offset:4px}
+.vertical-card__notice{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:12px;padding:24px;text-align:center;background:#1f231cd1;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#f3f0e9;opacity:0;visibility:hidden;transition:opacity .45s,visibility .45s}
+.vertical-card.is-open .vertical-card__notice{opacity:1;visibility:visible}
+.vertical-card__notice b{font:400 10px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;color:#1f1b10;background:#e4cda2;padding:8px 14px;border-radius:30px}
+.vertical-card__notice strong{font:400 clamp(26px,2.4vw,36px)/1.1 var(--f-display)}
+.vertical-card__notice span{font-size:14px;line-height:1.6;max-width:27ch;color:#e6e1d4}
+/* Group page: company capsules. QS Associates is the live one and points at its portfolio; the others are upcoming. */
+.page-group .group-overview{padding:clamp(60px,6.6vw,104px) 0 0}
+.page-group .group-overview .h2{margin:22px 0 clamp(38px,4.4vw,62px)}
+.group-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.group-tab{position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:92px;padding:0 20px 0 34px;border:1px solid #292b263d;border-radius:100px;color:#62655e;text-align:left;transition:border-color .3s,color .3s,background .3s}
+.group-tab__name{font:400 clamp(24px,2.5vw,38px)/1.05 var(--f-display);letter-spacing:-.01em}
+.group-tab__tag{flex:none;font:400 10px/1 var(--f-body);letter-spacing:.16em;text-transform:uppercase;padding:10px 14px;border-radius:30px;border:1px dashed #292b2670;white-space:nowrap}
+.group-tab.is-upcoming:hover,.group-tab.is-upcoming.is-open{border-color:#292b26;color:#292b26}
+.group-tab:focus-visible{outline:2px solid #8e5d18;outline-offset:4px}
+.group-tab.is-current{background:#292b26;border-color:#292b26;color:#f3f0e9}
+.group-tab.is-current .group-tab__tag{border:0;background:#dfbd85;color:#1f1b10}
+.group-tab.is-current::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:calc(var(--group-gap) + 1px);background:#292b26}
+.page-group .group-overview{--group-gap:96px}
+.group-status{position:relative;height:var(--group-gap);display:grid;place-items:center;text-align:center}
+.group-status span{position:relative;display:inline-flex;align-items:center;gap:12px;padding:13px 22px;border:1px solid #292b263d;border-radius:40px;background:var(--paper);font-size:14px;line-height:1.4;color:#292b26;opacity:0;transform:translateY(8px);transition:opacity .45s,transform .45s var(--ease-out)}
+.group-status span::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:#b8862f}
+.group-status.is-shown span{opacity:1;transform:none}
+.group-chip{display:inline-block;margin-right:12px;padding:8px 14px;border:1px solid #dfbd8599;border-radius:30px;color:#dfbd85;letter-spacing:.16em}
+.page-group .clients .h2 em{color:#ddc8a0}
+.page-group .clients{scroll-margin-top:0}
+@media(max-width:1100px){
+ .group-tab{min-height:78px;padding:0 14px 0 24px}
+ .group-tab__tag{padding:8px 10px;font-size:9px;letter-spacing:.12em}
+}
+@media(max-width:767px){
+ .group-tabs{grid-template-columns:minmax(0,1fr);gap:10px}
+ .group-tab{min-height:68px;padding:0 14px 0 26px}
+ .group-tab__name{font-size:28px}
+ .group-tab.is-current::after{display:none}
+ .page-group .group-overview{--group-gap:auto;padding-bottom:10px}
+ .group-status{min-height:76px;padding:14px 0}
+ .group-status span{font-size:13px;padding:12px 16px;text-align:left}
+}
+.page-group .footer{border-top:1px solid #ffffff1f}

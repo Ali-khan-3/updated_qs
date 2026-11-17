@@ -4,15 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Our Group of Companies — QS Realty</title>
-  <meta name="description" content="Meet QS Infra, QS Associates and Aura-Viva Designs, and explore the QS Realty group's client portfolio." />
+  <meta name="description" content="Meet QS Infra, QS Associates and Aura-Viva Designs, and explore the QS Associates client portfolio." />
   <meta name="theme-color" content="#737e66" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261113-2" />
+  <link rel="stylesheet" href="css/style.css?v=20261118-2" />
+  <link rel="stylesheet" href="css/premium.css?v=20261118-2" />
 </head>
-<body class="page-group">
+<body class="premium-home page-group" id="top">
   <header class="group-header container">
     <a href="index.html" aria-label="QS Realty — home"><img class="group-header__logo" src="assets/client/branding/QS LOGO.png" alt="QS Realty" /></a>
     <a class="link-u" href="index.html#verticals">← Back to our verticals</a>
@@ -22,19 +23,21 @@
       <div class="container">
         <p class="eyebrow">Our verticals</p>
         <h1 class="h2">Group of <em>companies.</em></h1>
-        <div class="group-overview__companies">
-          <h2 id="qs-infra">QS Infra</h2>
-          <h2 id="qs-associates">QS Associates</h2>
-          <h2 id="aura-viva-designs">Aura-Viva Designs</h2>
+        <!-- QS Associates is the live company; its portfolio follows. The other two are upcoming. -->
+        <div class="group-tabs" role="group" aria-label="Our companies">
+          <button type="button" class="group-tab is-upcoming" id="qs-infra" data-upcoming="QS Infra is in progress. We will share the details here soon."><span class="group-tab__name">QS Infra</span><span class="group-tab__tag">Upcoming</span></button>
+          <a class="group-tab is-current" id="qs-associates" href="#portfolio" aria-current="true"><span class="group-tab__name">QS Associates</span><span class="group-tab__tag">Portfolio below <span aria-hidden="true">↓</span></span></a>
+          <button type="button" class="group-tab is-upcoming" id="aura-viva-designs" data-upcoming="Aura-Viva Designs is in progress. We will share the details here soon."><span class="group-tab__name">Aura-Viva Designs</span><span class="group-tab__tag">Upcoming</span></button>
         </div>
+        <p class="group-status" role="status" aria-live="polite"></p>
       </div>
     </section>
-    <!-- ============ CLIENTS ============ -->
-    <section class="clients section section--dark" id="clients" data-cursor-dark>
+    <!-- ============ QS ASSOCIATES PORTFOLIO ============ -->
+    <section class="clients section section--dark" id="portfolio" aria-labelledby="portfolio-title">
       <div class="container">
         <div class="section-head section-head--split">
-          <p class="eyebrow eyebrow--light">Our group portfolio</p>
-          <h2 class="h2 "><span class="line"><span>Trusted by homes,</span></span><span class="line"><span><em>societies &amp; landmarks.</em></span></span></h2>
+          <p class="eyebrow eyebrow--light"><span class="group-chip">QS Associates</span> Client portfolio</p>
+          <h2 class="h2" id="portfolio-title"><span class="line"><span>Trusted by homes,</span></span><span class="line"><span><em>societies &amp; landmarks.</em></span></span></h2>
         </div>
       </div>
 
@@ -69,10 +72,34 @@
     </section>
 
   </main>
-  <footer class="group-footer container">
-    <a class="link-u" href="index.html#contact">Discuss your project ↗</a>
-    <a class="link-u" href="tel:+918888141899">+91 8888 141 899</a>
-    <a class="link-u" href="mailto:qsrealty@outlook.com">qsrealty@outlook.com</a>
+  <!-- ============ FOOTER (same as the home page) ============ -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer__word" aria-hidden="true"><span>QS</span> Realty</p>
+      <div class="footer__top">
+        <div class="footer__visit"><p class="eyebrow">Visit</p><p>Shop No. 1, Nawaz Manzil,<br>Off. BKC Road, L.B.S Marg,<br>Kurla (W), Mumbai 400 070</p><p class="footer__tag">The best at <em>what we build.</em></p></div>
+        <nav class="footer__nav" aria-label="Footer"><p class="eyebrow">Explore</p>
+          <a href="index.html#about" class="link-u">About</a>
+          <a href="index.html#services" class="link-u">Expertise</a>
+          <a href="index.html#projects" class="link-u">Projects</a>
+          <a href="index.html#footprint" class="link-u">Footprint</a>
+          <a href="index.html#verticals" class="link-u">Our verticals</a>
+          <a href="index.html#team" class="link-u">Team</a>
+          <a href="index.html#contact" class="link-u">Contact</a>
+        </nav>
+        <div class="footer__contact"><p class="eyebrow">Contact</p>
+          <a href="tel:+918888141899" class="link-u">+91 8888 141 899</a>
+          <a href="mailto:qsrealty@outlook.com" class="link-u">qsrealty@outlook.com</a>
+          <a href="https://www.qsrealty.in" class="link-u">www.qsrealty.in</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>© <span class="js-year">2026</span> QS Realty. All rights reserved.</p>
+        <p>Kurla (W), Mumbai</p>
+        <a href="#top" class="link-u">Back to top ↑</a>
+      </div>
+    </div>
   </footer>
+  <script src="js/group.js?v=20261118-1"></script>
 </body>
 </html>
