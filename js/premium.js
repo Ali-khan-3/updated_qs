@@ -222,44 +222,26 @@
     // Card motion (function-based x values recompute after resizing).
     const HIDDEN = "inset(0% 0% 100% 0%)", SHOWN = "inset(0% 0% 0% 0%)";
     const ease = "sine.inOut", at0 = .12;
-    // Preview switch while the client decides: add ?cards=swap to the URL for the side-swapping version.
-    const swapSides = new URLSearchParams(location.search).get("cards") === "swap";
     timeline.to({}, { duration: hold }, 0).addLabel("start", 0).addLabel("project-0", .4);
     cards.slice(1).forEach((card, offset) => {
       const i = offset + 1, at = offset * step + hold, t = at + at0;
-      if (swapSides) {
-        // Exact reference motion: the right-hand card slides across to the left while its
-        // content wipes to the next project, the old left card recedes, a new card rises on the right.
-        const [movers, risers] = i % 2 ? [slides, copies] : [copies, slides];
-        const leaver = risers[i - 1], from = movers[i - 1], to = movers[i], riser = risers[i];
-        timeline.set(copies[i], { autoAlpha: 1 }, at + .1)
-          .set(leaver, { zIndex: 1 }, at + .1).set(riser, { zIndex: 2 }, at + .1)
-          .set(from, { zIndex: 3 }, at + .1).set(to, { zIndex: 4 }, at + .1)
-          .to(leaver, { scale: .9, autoAlpha: 0, duration: travel, ease }, t)
-          .fromTo(from, { x: right }, { x: 0, duration: travel, ease, immediateRender: false }, t)
-          .fromTo(to, { x: right, clipPath: HIDDEN }, { x: 0, clipPath: SHOWN, duration: travel, ease }, t)
-          .fromTo(riser, { x: right, yPercent: 108 }, { x: right, yPercent: 0, duration: travel, ease }, t)
-          .set(from, { autoAlpha: 0 }, t + travel + .02);
-        if (i % 2) timeline.to($("img", from), { scale: 1.3, duration: travel, ease }, t)
-          .fromTo($("img", to), { scale: 1.5 }, { scale: 1, duration: travel, ease }, t);
-        timeline.addLabel("project-" + i, i * step + .4);
-        return;
-      }
-      // Fixed sides: details on the left, image on the right. Same tweens as the reference:
-      // the old details card recedes (scale .9 + fade) while the next one rises from below;
-      // the next image wipes in from the top inside the image frame, settling from a zoom.
-      timeline.set(copies[i], { autoAlpha: 1 }, at + .1)
-        .set([slides[i - 1], copies[i - 1]], { zIndex: 1 }, at + .1)
-        .set([slides[i], copies[i]], { zIndex: 2 }, at + .1)
-        .to(copies[i - 1], { scale: .9, autoAlpha: 0, duration: travel, ease }, t)
-        .fromTo(copies[i], { yPercent: 108 }, { yPercent: 0, duration: travel, ease }, t)
-        .to($("img", slides[i - 1]), { scale: 1.3, duration: travel, ease }, t)
-        .fromTo(slides[i], { x: right, clipPath: HIDDEN }, { x: right, clipPath: SHOWN, duration: travel, ease }, t)
-        .fromTo($("img", slides[i]), { scale: 1.5 }, { scale: 1, duration: travel, ease }, t)
-        .set(slides[i - 1], { autoAlpha: 0 }, t + travel + .02)
-        .addLabel("project-" + i, i * step + .4);
+      // Reference motion with fixed sides (details left, image right for every project):
+      // the old details card recedes, the old image slides across to the left while the next
+      // project's details wipe in over it, and the next image rises from below on the right.
+      const leaver = copies[i - 1], from = slides[i - 1], to = copies[i], riser = slides[i];
+      timeline.set(to, { autoAlpha: 1 }, at + .1)
+        .set(leaver, { zIndex: 1 }, at + .1).set(riser, { zIndex: 2 }, at + .1)
+        .set(from, { zIndex: 3 }, at + .1).set(to, { zIndex: 4 }, at + .1)
+        .to(leaver, { scale: .9, autoAlpha: 0, duration: travel, ease }, t)
+        .fromTo(from, { x: right }, { x: 0, duration: travel, ease, immediateRender: false }, t)
+        .to($("img", from), { scale: 1.3, duration: travel, ease }, t)
+        .fromTo(to, { x: right, clipPath: HIDDEN }, { x: 0, clipPath: SHOWN, duration: travel, ease }, t)
+        .fromTo(riser, { x: right, yPercent: 108 }, { x: right, yPercent: 0, duration: travel, ease }, t)
+        .fromTo($("img", riser), { scale: 1.5 }, { scale: 1, duration: travel, ease }, t)
+        .set(from, { autoAlpha: 0 }, t + travel + .02);
+      timeline.addLabel("project-" + i, i * step + .4);
     });
-        // The last project simply scrolls away into the completed-buildings list.
+    // The last project simply scrolls away into the completed-buildings list.
     timeline.to({}, { duration: .4 }, exitStart - .4).addLabel("end");
     projectTrigger = timeline.scrollTrigger;
     update(0);
