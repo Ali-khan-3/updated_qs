@@ -55,7 +55,6 @@
     const slug = new URLSearchParams(location.search).get("p");
     const i = Math.max(0, data.featured.findIndex((p) => p.slug === slug));
     const p = data.featured[i];
-    const next = data.featured[(i + 1) % data.featured.length];
     const m = meta(p);
     const enquiry = encodeURIComponent(`Hello QS Realty, I'd like to know more about ${p.name}.`);
 
@@ -84,23 +83,6 @@
         </div>
       </section>
 
-      <section class="pj-gallery" aria-label="Project renderings">
-        <section class="project-story" data-project-story="${esc(p.slug)}" aria-label="Explore ${esc(p.name)} renderings"></section>
-      </section>
-
-      <section class="pj-process section section--dark" data-cursor-dark>
-        <div class="container">
-          <div class="section-head section-head--split">
-            <p class="eyebrow eyebrow--light">Delivered under one roof</p>
-            <h2 class="h2 reveal-lines"><span class="line"><span>Every stage,</span></span><span class="line"><span><em>one team.</em></span></span></h2>
-          </div>
-          <ol class="pj-process__list">
-            ${data.process.map((s, k) => `
-              <li class="reveal-up"><span>${pad(k + 1)}</span><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></li>`).join("")}
-          </ol>
-        </div>
-      </section>
-
       <section id="project-enquiry" class="pj-cta section section--sage" data-cursor-dark>
         <div class="container pj-cta__inner">
           <h2 class="pj-cta__title reveal-lines"><span class="line"><span>Interested in</span></span><span class="line"><span><em>${esc(p.name)}?</em></span></span></h2>
@@ -109,15 +91,6 @@
             <a href="tel:+918888141899" class="btn-arrow btn-arrow--light"><span>+91 8888 141 899</span>${arrow}</a>
           </div>
         </div>
-      </section>
-
-      <a class="pj-next" href="project.html?p=${esc(next.slug)}" data-transition data-cursor="Next venture" data-cursor-dark>
-        <img src="${esc(next.image)}" alt="" loading="lazy" />
-        <span class="pj-next__shade"></span>
-        <span class="pj-next__inner container">
-          <span class="eyebrow eyebrow--light">Next venture</span>
-          <span class="pj-next__title">${esc(next.name)} ${arrow}</span>
-        </span>
-      </a>`;
+      </section>`;
   }
 })();
