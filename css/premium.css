@@ -176,10 +176,8 @@ html:has(.premium-home){font-size:100%;scroll-behavior:auto}
 .premium-home .footprint{background:#e9e7dd}
 .premium-home .footprint__copy .h2{font-size:clamp(50px,5.6vw,95px);margin:25px 0}
 .premium-home .footprint__copy>p:not(.eyebrow){font-size:14px;max-width:380px}
-.premium-home .footprint__map{background:#e0e1d5;border-radius:5px;padding:25px}
 .premium-home .footprint__areas{display:grid;grid-template-columns:1fr 1fr}
 .footprint__areas button{text-align:left;width:100%;min-height:44px}
-.premium-home .pin__pulse{animation:none}
 .premium-home .verticals{background:#dce0d3;border:0}
 .premium-home .verticals__layout{display:block}
 .premium-home .verticals__intro{display:grid;grid-template-columns:1fr 2fr;gap:30px;margin-bottom:55px}
@@ -298,7 +296,6 @@ html:has(.premium-home){font-size:100%;scroll-behavior:auto}
 .premium-home .ethos__values{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:15px 25px}
 .premium-home .ethos__value-title{font-size:clamp(20px,6vw,25px)}
 .premium-home .footprint__grid{grid-template-columns:1fr;gap:35px}
-.premium-home .footprint__map{padding:10px}.premium-home .footprint__caption{font-size:9px}
 .premium-home .verticals__intro{grid-template-columns:1fr}
 .premium-home .verticals__all{grid-column:1}
 .premium-home .verticals__cards{grid-template-columns:1fr;gap:40px}
@@ -432,15 +429,6 @@ html:has(.premium-home){font-size:100%;scroll-behavior:auto}
 .premium-home .footprint__areas li.is-active,.premium-home .footprint__areas li:hover{color:#80643b;background:none}
 .premium-home .footprint__areas li.is-active button{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:8px}
 .premium-home .footprint__areas li small{font:400 10px var(--f-body);color:inherit}
-.premium-home .footprint__map{background:#e9e8df;border-radius:80px 24px 80px 24px;padding:0;overflow:hidden;border:0}
-.premium-home .map-sea{fill:#a0ac98}.premium-home .map-coast{stroke:#9ba48e}
-.premium-home .map-road{stroke:#8e8778;stroke-width:2;stroke-opacity:.25}
-.premium-home .map-creek{stroke:#a0ac98;stroke-width:18;stroke-dasharray:none}
-.premium-home .map-label--sea{fill:#f9f4e9}
-.premium-home .pin text{font:400 18px var(--f-display);letter-spacing:0;text-transform:none}
-.premium-home .pin__dot{fill:#a08759}.premium-home .pin__pulse{stroke:#a08759;opacity:.4}
-.premium-home .pin.is-active .pin__dot{fill:#80643b}.premium-home .pin.is-active text{fill:#765a32}
-.premium-home .footprint__caption{position:absolute;bottom:25px;right:30px;font-size:9px;letter-spacing:.07em}
 .premium-home .verticals{background:#606750;color:var(--paper)}
 .premium-home .verticals__intro{grid-template-columns:1fr auto;gap:25px;align-items:end}
 .premium-home .verticals__intro>.eyebrow{grid-column:1/-1;color:#e8dfce}
@@ -518,7 +506,6 @@ html:has(.premium-home){font-size:100%;scroll-behavior:auto}
  .premium-home .ethos__statement,.premium-home .ethos__mission-text{font-size:13px}.premium-home .ethos__grid{grid-column:1;grid-row:3}
  .ethos-photo{grid-column:1;grid-row:4;height:480px;min-height:0}.premium-home .ethos__values{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 22px}.premium-home .ethos__value-title{font-size:clamp(19px,6vw,24px);gap:7px;flex-wrap:wrap}
  .premium-home .footprint__grid{grid-template-columns:1fr;gap:35px}.premium-home .footprint__copy .h2{font-size:54px}.premium-home .footprint__areas button{font-size:29px}
- .premium-home .footprint__map{border-radius:55px 20px 55px 20px}.premium-home .footprint__caption{bottom:14px;right:18px;font-size:8px}
  .premium-home .verticals__intro{grid-template-columns:1fr;gap:25px}.premium-home .verticals__intro h2{font-size:54px}.premium-home .verticals__all{grid-column:1}
  .premium-home .verticals__cards{grid-template-columns:1fr;gap:25px}.premium-home .vertical-card__wordmark{padding:23px}.premium-home .vertical-card__qs,.premium-home .vertical-card__name,.premium-home .vertical-card__aura{font-size:32px}
  .verticals__note{font-size:14px;line-height:1.6}.premium-home .contact{grid-template-columns:1fr;gap:50px}.premium-home .contact__visual{padding:0}.premium-home .contact__panel{padding:35px 0 0;border:0;border-top:1px solid var(--line)}
@@ -676,4 +663,46 @@ html:has(.premium-home){font-size:100%;scroll-behavior:auto}
  .partner-card svg{width:56px;height:56px}
  .partner-card h3{font-size:32px;margin-bottom:10px}
  .partner-card p{font-size:14px;max-width:none}
+}
+/* Footprint: a real street map of Mumbai's suburbs (static render of OpenStreetMap data, olive night by default)
+   with HTML pins on top and a day/night switch. Pin positions are percentages of the map image. */
+.fmap{--fmap-dot:#e3bf7c;--fmap-dot-ring:#1a1d17;--fmap-halo:#e3bf7c33;--fmap-halo-soft:#e3bf7c14;--fmap-chip:#f4efe3;--fmap-chip-text:#23261f;--fmap-on:#e3bf7c;--fmap-on-text:#1f1b10;--fmap-edge:#ffffff1f;--fmap-credit:#ffffff8c}
+.fmap[data-map-mode=day]{--fmap-dot:#a97624;--fmap-dot-ring:#fff;--fmap-halo:#a9762433;--fmap-halo-soft:#a9762414;--fmap-chip:#fff;--fmap-chip-text:#292b26;--fmap-on:#292b26;--fmap-on-text:#f3f0e9;--fmap-edge:#0000001a;--fmap-credit:#00000085}
+.premium-home .footprint__map{position:relative;padding:0;border:0;overflow:hidden;border-radius:28px;background:#272a23;box-shadow:0 34px 70px -42px #1f241c99;isolation:isolate}
+.fmap::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px var(--fmap-edge);pointer-events:none;z-index:4}
+.fmap__stage{position:relative;aspect-ratio:1334/1422}
+.fmap__img,.fmap__img img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.fmap__img img{object-fit:cover}
+.fmap__img--day{opacity:0;transition:opacity .7s ease}
+.fmap[data-map-mode=day] .fmap__img--day{opacity:1}
+.fmap__pins{position:absolute;inset:0;z-index:2}
+.fmap-pin{position:absolute;width:0;height:0;cursor:pointer}
+.fmap-pin__dot{position:absolute;left:-6.5px;top:-6.5px;width:13px;height:13px;border-radius:50%;background:var(--fmap-dot);border:2.5px solid var(--fmap-dot-ring);box-shadow:0 0 0 7px var(--fmap-halo),0 2px 6px #0004;transition:box-shadow .35s,transform .35s var(--ease-out),background .5s,border-color .5s}
+.fmap-pin__name{position:absolute;top:0;left:15px;transform:translateY(-50%);white-space:nowrap;font:500 12.5px/1 var(--f-body);letter-spacing:.02em;padding:7px 11px;border-radius:30px;background:var(--fmap-chip);color:var(--fmap-chip-text);box-shadow:0 4px 14px -6px #0007;transition:background .35s,color .35s,opacity .3s}
+.fmap-pin__name small{font:500 10px/1 var(--f-body);letter-spacing:.12em;margin-left:7px;opacity:.7}
+.fmap-pin--left .fmap-pin__name{left:auto;right:15px}
+.fmap-pin--hq .fmap-pin__dot{left:-9px;top:-9px;width:18px;height:18px}
+.fmap-pin--hq .fmap-pin__name{left:20px;font-size:13px;padding:8px 13px}
+.fmap-pin.is-active{z-index:2}
+.fmap-pin.is-active .fmap-pin__dot{transform:scale(1.2);box-shadow:0 0 0 10px var(--fmap-halo),0 0 0 21px var(--fmap-halo-soft),0 2px 8px #0005}
+.fmap-pin.is-active .fmap-pin__name{background:var(--fmap-on);color:var(--fmap-on-text)}
+.fmap__mode{position:absolute;top:20px;right:20px;z-index:5;display:flex;padding:4px;border-radius:40px;background:#141711b3;border:1px solid #ffffff24;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:background .5s,border-color .5s}
+.fmap__mode[hidden]{display:none}
+.fmap__mode button{min-width:60px;height:36px;padding:0 14px;border-radius:30px;font:400 10.5px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:#e9e4d8c4;transition:background .3s,color .3s}
+.fmap__mode button[aria-pressed=true]{background:#e3bf7c;color:#1f1b10}
+.fmap__mode button:focus-visible{outline:2px solid #e3bf7c;outline-offset:2px}
+.fmap[data-map-mode=day] .fmap__mode{background:#ffffffc7;border-color:#0000001c}
+.fmap[data-map-mode=day] .fmap__mode button{color:#4b4c48}
+.fmap[data-map-mode=day] .fmap__mode button[aria-pressed=true]{background:#292b26;color:#f3f0e9}
+.fmap__credit{position:absolute;right:22px;bottom:13px;z-index:5;font:400 9px/1.2 var(--f-body);letter-spacing:.03em;color:var(--fmap-credit);transition:color .5s}
+.fmap__credit a{color:inherit}
+.fmap__credit a:hover{text-decoration:underline}
+@media(min-width:1000px){.premium-home .footprint__map{border-radius:80px 24px 80px 24px}.fmap__credit{right:30px;bottom:16px}}
+@media(max-width:767px){
+ .premium-home .footprint__map{border-radius:22px}
+ .fmap-pin__name{opacity:0;pointer-events:none;font-size:12px;padding:6px 10px}
+ .fmap-pin.is-active .fmap-pin__name{opacity:1}
+ .fmap__mode{top:12px;right:12px}
+ .fmap__mode button{min-width:54px}
+ .fmap__credit{right:14px;bottom:9px;font-size:8px}
 }

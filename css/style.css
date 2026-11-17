@@ -478,22 +478,6 @@ em { font-style: italic; }
 .footprint__areas li:hover small, .footprint__areas li.is-active small { color: var(--sand); }
 
 .footprint__map { position: relative; background: var(--paper); border: 1px solid var(--line); padding: var(--s-2); color: var(--ink); }
-.footprint__map svg { width: 100%; height: auto; display: block; }
-.map-sea { fill: rgba(115, 126, 102, 0.12); }
-.map-coast { fill: none; stroke: var(--sage); stroke-width: 1.4; }
-.map-creek { fill: none; stroke: var(--sage-soft); stroke-width: 1; stroke-dasharray: 4 6; }
-.map-road { fill: none; stroke: var(--ink); stroke-opacity: 0.16; stroke-width: 1; }
-.map-label { font-family: var(--f-display); font-style: italic; font-size: 18px; fill: var(--sage); }
-.map-label--sea { letter-spacing: 0.1em; writing-mode: vertical-rl; }
-.pin text { font-family: var(--f-body); font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; fill: var(--ink); transition: fill 0.3s; }
-.pin__dot { fill: var(--sage); transition: r 0.3s; }
-.pin__pulse { fill: none; stroke: var(--sage); stroke-width: 1; transform-box: fill-box; transform-origin: center; animation: pulse 2.6s var(--ease-out) infinite; }
-.pin--hq .pin__dot { fill: var(--ink); }
-.pin--hq .pin__pulse { stroke: var(--ink); }
-.pin.is-active .pin__dot { fill: #b5654f; }
-.pin.is-active text { fill: #b5654f; }
-@keyframes pulse { 0% { transform: scale(0.4); opacity: 1; } 100% { transform: scale(1.8); opacity: 0; } }
-.footprint__caption { font-size: var(--fs-xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--graphite); margin-top: var(--s-1); text-align: right; }
 @media (min-width: 900px) { .footprint__grid { grid-template-columns: 5fr 6fr; gap: var(--s-12); } }
 
 /* =========================================================

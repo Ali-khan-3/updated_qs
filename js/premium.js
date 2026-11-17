@@ -123,6 +123,9 @@
     // Partner cards rise one after another as the row comes into view.
     gsap.from(".partner-card", { y: 50, autoAlpha: 0, duration: 1, ease: "power3.out", stagger: .09,
       scrollTrigger: { trigger: ".partner__cards", start: "top 90%", once: true } });
+    // Map pins drop in one after another when the map comes into view.
+    gsap.from(".fmap-pin", { scale: 0, autoAlpha: 0, duration: .7, ease: "back.out(2.2)", stagger: .09,
+      scrollTrigger: { trigger: ".fmap", start: "top 70%", once: true } });
     $$(".js-counter").forEach(el => {
       const count = { value: 0 };
       gsap.to(count, { value: +el.dataset.to, duration: 1.8, ease: "power2.out",
@@ -371,7 +374,7 @@
     matchMedia("(min-width: 1280px)").addEventListener("change", e => { if (e.matches && document.body.classList.contains("menu-open")) setOpen(false); });
   }
   function setupMap() {
-    const items = $$(".footprint__areas li"), pins = $$(".pin");
+    const map = $(".fmap"), items = $$(".footprint__areas li"), pins = $$(".fmap-pin");
     const select = key => {
       items.forEach(el => { const on = el.dataset.pin === key; el.classList.toggle("is-active", on); $("button", el)?.setAttribute("aria-pressed", String(on)); });
       pins.forEach(el => el.classList.toggle("is-active", el.dataset.pin === key));
@@ -383,6 +386,20 @@
       button.addEventListener("focus", () => select(item.dataset.pin));
       button.addEventListener("mouseenter", () => select(item.dataset.pin));
     });
+    // The pins on the map select their place too.
+    pins.forEach(pin => ["mouseenter", "click"].forEach(type => pin.addEventListener(type, () => select(pin.dataset.pin))));
+    // Day / night switch. The day image is only downloaded the first time someone asks for it.
+    const switcher = $(".fmap__mode"), modes = $$("button", switcher);
+    const setMode = mode => {
+      if (mode === "day") $$("[data-srcset], [data-src]", map).forEach(el => {
+        if (el.dataset.srcset) { el.srcset = el.dataset.srcset; delete el.dataset.srcset; }
+        if (el.dataset.src) { el.src = el.dataset.src; delete el.dataset.src; }
+      });
+      map.dataset.mapMode = mode;
+      modes.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.mapMode === mode)));
+    };
+    modes.forEach(button => button.addEventListener("click", () => setMode(button.dataset.mapMode)));
+    switcher.hidden = false;
     select("kurla");
   }
   function setupMobileContact() {
