@@ -35,7 +35,7 @@ On desktop, the homepage opens with a horizontal gold brand mark and asset-readi
 ## Before or soon after launch
 
 - **Photos:** featured projects and team portraits use supplied client assets. Supporting editorial images are illustrative; four AI photographs use optimized WebP files in `assets/img/editorial/`; their PNG masters are archived in `output/backups/unused-images/assets/img/editorial/`. Their exact prompts, purpose and built-in image-generation provenance are recorded in `assets/img/editorial/generation-notes.json`. They do not document completed QS Realty projects.
-- **Coastline:** the partnership uses `assets/img/editorial/marine-drive-dusk.webp`. The contact section uses a lazy-loaded Google Maps embed for the QS Realty main office in Kurla West, with the existing directions link above it.
+- **Development partners:** the section no longer uses a background photo. It shows the heading beside a short pitch and four rounded cards (dark, ivory, sand and sage) with line icons; the concept mockups are in `output/previews/partners-five-concepts/`. `assets/img/editorial/marine-drive-dusk.webp` is retained but no longer referenced. The contact section uses a lazy-loaded Google Maps embed for the QS Realty main office in Kurla West, with the existing directions link above it.
 - **Social preview:** set `og:image` in `index.html` to a full URL (`https://<domain>/assets/client/projects/Pinnacle%2C%20Kurla%20west.png`) once the domain is final.
 - **Business hours:** the contact panel says "Mon–Sat, 10am–8pm". Confirm this with the client.
 

@@ -115,11 +115,14 @@
       scrollTrigger: { trigger: hero, start: "top top", end: desktop ? "50% top" : "60% top", scrub: .5 } });
     gsap.to(".hero__video", { yPercent: 10, scale: 1.06, ease: "none",
       scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: .5 } });
-    const revealTargets = $$(".about-copy > *, .numbers .section-head, .stat, .team__intro, .leader, .counsel, .crew, .partner__title, .partner__lede, .partner__grid li, .ethos-heading, .ethos__vision, .ethos__value, .footprint__copy, .footprint__map, .verticals__intro, .vertical-card, .contact__visual-inner, .contact__panel-inner");
+    const revealTargets = $$(".about-copy > *, .numbers .section-head, .stat, .team__intro, .leader, .counsel, .crew, .partner__title, .partner__side, .ethos-heading, .ethos__vision, .ethos__value, .footprint__copy, .footprint__map, .verticals__intro, .vertical-card, .contact__visual-inner, .contact__panel-inner");
     revealTargets.forEach(el => {
       gsap.from(el, { y: 32, autoAlpha: 0, duration: 1, ease: "power3.out",
         scrollTrigger: { trigger: el, start: "top 94%", once: true } });
     });
+    // Partner cards rise one after another as the row comes into view.
+    gsap.from(".partner-card", { y: 50, autoAlpha: 0, duration: 1, ease: "power3.out", stagger: .09,
+      scrollTrigger: { trigger: ".partner__cards", start: "top 90%", once: true } });
     $$(".js-counter").forEach(el => {
       const count = { value: 0 };
       gsap.to(count, { value: +el.dataset.to, duration: 1.8, ease: "power2.out",
@@ -127,7 +130,7 @@
         scrollTrigger: { trigger: el, start: "top 92%", once: true } });
     });
     if (desktop) {
-      $$(".ethos-photo img, .partner__media img, .vertical-card__image img").forEach(img => {
+      $$(".ethos-photo img, .vertical-card__image img").forEach(img => {
         gsap.fromTo(img, { scale: 1.1, yPercent: -3 }, { yPercent: 3, ease: "none",
           scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: .7 } });
       });
