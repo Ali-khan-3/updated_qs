@@ -38,13 +38,13 @@ window.QS_PROJECTS = {
     },
     {
       "slug": "bismillah-restaurant",
-      "mobileImage": "assets/client/projects/mobile/bismillah-restaurant.webp",
+      "mobileImage": "assets/client/projects/mobile/bismillah-restaurant-final.webp",
       "name": "Bismillah Restaurant",
       "status": "Taking shape",
       "type": "Commercial building",
       "location": "JVPD, Juhu",
-      "image": "assets/client/projects/bismillah/cleaned/front-day-clean.png",
-      "imageAlt": "Bismillah Restaurant — front elevation in daylight",
+      "image": "assets/client/projects/bismillah/bismillah-restaurant-final.png",
+      "imageAlt": "Bismillah Restaurant — street view of the building at dusk",
       "summary": "A commercial address in JVPD, built for hospitality, footfall and longevity.",
       "lead": "A commercial building in the heart of JVPD — designed around the people who will dine, work and gather in it.",
       "body": [
@@ -53,8 +53,8 @@ window.QS_PROJECTS = {
       ],
       "gallery": [
         {
-          "src": "assets/client/projects/bismillah/cleaned/front-day-clean.png",
-          "alt": "Bismillah Restaurant — front elevation in daylight",
+          "src": "assets/client/projects/bismillah/bismillah-restaurant-final.png",
+          "alt": "Bismillah Restaurant — street view of the building at dusk",
           "width": 1254,
           "height": 1254
         },
