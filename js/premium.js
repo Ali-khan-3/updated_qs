@@ -427,18 +427,16 @@
     });
     document.addEventListener("keydown", event => { if (event.key === "Escape") close(); });
   }
+  // On phones the office map sits after the enquiry form instead of under the heading.
   function setupMobileContact() {
-    const query = matchMedia("(max-width: 767px)"), contact = $("#contact");
-    const details = $(".contact__details"), map = $(".contact__map");
+    const query = matchMedia("(max-width: 767px)"), contact = $("#contact"), map = $(".contact__map");
     const office = document.createElement("div");
     office.className = "contact__office";
-    const anchors = [details, map].map(el => {
-      const anchor = document.createComment("Office position on desktop");
-      el.before(anchor); return anchor;
-    });
+    const anchor = document.createComment("Map position on desktop");
+    map.before(anchor);
     const arrange = () => {
-      if (query.matches) { office.append(details, map); contact.append(office); }
-      else { [details, map].forEach((el, i) => anchors[i].after(el)); office.remove(); }
+      if (query.matches) { office.append(map); contact.append(office); }
+      else { anchor.after(map); office.remove(); }
       if (window.ScrollTrigger && entryDone) ScrollTrigger.refresh();
     };
     arrange(); query.addEventListener("change", arrange);

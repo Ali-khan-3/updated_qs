@@ -610,11 +610,7 @@ em { font-style: italic; }
 .contact__title { font-family: var(--f-display); font-weight: 300; font-size: clamp(3rem, 1.2rem + 4.6vw, 6.5rem); line-height: 0.92; letter-spacing: -0.03em; }
 .contact__title em { color: var(--sage-deep); }
 .contact__title .line:nth-child(2) { padding-left: 0.8em; }
-.contact__details { display: grid; gap: var(--s-3); padding-top: var(--s-3); border-top: 1px solid var(--line); font-size: var(--fs-sm); line-height: 1.6; }
 .contact__visual .eyebrow { color: var(--graphite); }
-.contact__details .eyebrow { margin-bottom: 0.35rem; }
-.contact__directions { display: inline-block; margin-top: 0.4rem; color: var(--sage-deep); }
-@media (min-width: 640px) { .contact__details { grid-template-columns: 1.6fr 1fr 1fr; } }
 
 /* ---------- right: tabbed form panel ---------- */
 .contact__panel { display: flex; align-items: center; padding: var(--s-8) var(--gutter); }
@@ -787,7 +783,7 @@ em { font-style: italic; }
 }
 @media (max-width: 799px) {
   /* comfortable tap targets for the text links people use most on phones */
-  .footer__nav a, .footer__contact a, .contact__details a { padding: 0.55rem 0; }
+  .footer__nav a, .footer__contact a { padding: 0.55rem 0; }
   .btn-arrow { min-height: 44px; }
   .consent { padding: 0.35rem 0; }
 }
