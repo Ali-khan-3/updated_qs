@@ -116,11 +116,16 @@
       scrollTrigger: { trigger: hero, start: "top top", end: desktop ? "50% top" : "60% top", scrub: .5 } });
     gsap.to(".hero__video", { yPercent: 10, scale: 1.06, ease: "none",
       scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: .5 } });
-    const revealTargets = $$(".about-copy > *, .numbers .section-head, .stat, .team__intro, .leader, .counsel, .crew, .partner__title, .partner__side, .ethos-heading, .ethos__vision, .ethos__value, .footprint__copy, .footprint__map, .verticals__intro, .vertical-card, .contact__visual-inner, .contact__panel-inner");
+    const revealTargets = $$(".about-roof__text > *, .numbers .section-head, .stat, .team__intro, .leader, .counsel, .crew, .partner__title, .partner__side, .ethos-heading, .ethos__vision, .ethos__value, .footprint__copy, .footprint__map, .verticals__intro, .vertical-card, .contact__visual-inner, .contact__panel-inner");
     revealTargets.forEach(el => {
       gsap.from(el, { y: 32, autoAlpha: 0, duration: 1, ease: "power3.out",
         scrollTrigger: { trigger: el, start: "top 94%", once: true } });
     });
+    // About: the building settles in, then its three floor labels appear from the ground up.
+    gsap.from(".about-roof__art img", { y: 40, autoAlpha: 0, duration: 1.4, ease: "power3.out",
+      scrollTrigger: { trigger: ".about-roof", start: "top 75%", once: true } });
+    gsap.from([...$$(".about-roof__tags li")].reverse(), { scale: .6, autoAlpha: 0, duration: .6, ease: "back.out(2)", stagger: .18, delay: .7,
+      scrollTrigger: { trigger: ".about-roof", start: "top 75%", once: true } });
     // Partner cards rise one after another as the row comes into view.
     gsap.from(".partner-card", { y: 50, autoAlpha: 0, duration: 1, ease: "power3.out", stagger: .09,
       scrollTrigger: { trigger: ".partner__cards", start: "top 90%", once: true } });
