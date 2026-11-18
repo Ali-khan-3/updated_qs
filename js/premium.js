@@ -80,8 +80,8 @@
   gsap.registerPlugin(ScrollTrigger);
   ScrollTrigger.config({ ignoreMobileResize: true });
   const responsive = gsap.matchMedia();
-  responsive.add({ desktop: "(min-width: 1000px)", motion: "(prefers-reduced-motion: no-preference)" }, context => {
-    const { desktop, motion: animate } = context.conditions;
+  responsive.add({ desktop: "(min-width: 1000px)", phone: "(max-width: 767px)", roomy: "(min-height: 560px)", motion: "(prefers-reduced-motion: no-preference)" }, context => {
+    const { desktop, phone, roomy, motion: animate } = context.conditions;
     if (!animate) {
       document.documentElement.classList.add("no-motion");
       entryTimeline?.kill();
@@ -99,10 +99,12 @@
     }
     const storyCleanups = [];
     collageMotion(!desktop);
+    // The pinned project conveyor runs on every screen with room for it: side by side from 768px,
+    // stacked (image above, details below) on phones. Very short screens keep the plain cards.
+    if (desktop || roomy) storyCleanups.push(projectMotion(phone));
     if (desktop) {
-      storyCleanups.push(projectMotion());
       window.QSProjectStory?.roots.forEach(root => storyCleanups.push(window.QSProjectStory.mount(root, moveTo)));
-    } else {
+    } else if (!roomy) {
       cards.forEach(card => {
         gsap.from(card.querySelector(".venture__image"), {
           y: 35, opacity: .35, duration: 1.1, ease: "power3.out",
@@ -135,11 +137,11 @@
         onUpdate: () => el.textContent = formatNumber(Math.round(count.value), el.dataset.format),
         scrollTrigger: { trigger: el, start: "top 92%", once: true } });
     });
+    $$(".vertical-card__image img").forEach(img => {
+      gsap.fromTo(img, { scale: 1.1, yPercent: -3 }, { yPercent: 3, ease: "none",
+        scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: .7 } });
+    });
     if (desktop) {
-      $$(".vertical-card__image img").forEach(img => {
-        gsap.fromTo(img, { scale: 1.1, yPercent: -3 }, { yPercent: 3, ease: "none",
-          scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: .7 } });
-      });
       gsap.from(".footer__word", { yPercent: 20, opacity: .4, ease: "none",
         scrollTrigger: { trigger: ".footer", start: "top 95%", end: "bottom bottom", scrub: .7 } });
     }
@@ -169,7 +171,8 @@
       .fromTo(".collage__statement", { autoAlpha: 0, y: 15 }, { autoAlpha: 1, y: 0, duration: .8 }, 1.8)
       .to({}, { duration: .45 });
   }
-  function projectMotion() {
+  // stacked = phone layout: the image slot sits above the details slot instead of beside it.
+  function projectMotion(stacked = false) {
     const stage = $(".project-stage"), deck = $(".project-deck");
     const copies = cards.map(card => $(".venture__copy", card));
     const portal = document.createElement("div");
@@ -186,10 +189,13 @@
     });
     deck.append(portal);
     stage.classList.add("is-enhanced");
+    stage.classList.toggle("is-stacked", stacked);
     let refreshFrame = 0;
     const step = 1.75, hold = .53, travel = 1.25; // cards start moving almost as soon as a scroll begins
     const exitStart = (cards.length - 1) * step + .9;
     const right = () => deck.clientWidth / 2 + 6; // x offset of the right-hand slot
+    // Stacked slots: how far down the details slot starts, and the heights of the two slots.
+    const drop = () => copies[0].offsetTop, detailsHeight = () => copies[0].offsetHeight, imageHeight = () => copies[0].offsetTop - 10;
     const switches = cards.slice(1).map((_, i) => i * step + hold + .12 + travel / 2);
     const update = time => {
       if (!stage.classList.contains("is-enhanced")) return;
@@ -211,16 +217,17 @@
     gsap.set(copies, { autoAlpha: 0, zIndex: 1 });
     gsap.set(copies[0], { autoAlpha: 1, zIndex: 2 });
     gsap.set(slides, { zIndex: 1 });
-    gsap.set(slides[0], { x: right(), zIndex: 2 });
+    gsap.set(slides[0], stacked ? { zIndex: 2 } : { x: right(), zIndex: 2 });
     const timeline = gsap.timeline({
       onUpdate() { update(this.time()); },
       scrollTrigger: {
-        id: "project-cards", trigger: stage, start: "top 90px",
-        end: () => "+=" + innerHeight * cards.length * 1.25,
+        id: "project-cards", trigger: stage, start: stacked ? "top 82px" : "top 90px",
+        end: () => "+=" + innerHeight * cards.length * (stacked ? .9 : 1.25),
         pin: true, scrub: .3, anticipatePin: 1, invalidateOnRefresh: true,
         // One scroll gesture carries the section to the next project, like the reference.
         // Input is held while the glide runs, then the smooth-scroller is re-synced to where it landed.
-        snap: { snapTo: "labelsDirectional", duration: { min: 1, max: 1.2 }, delay: .02, ease: "sine.inOut", inertia: false,
+        // On phones the glide is shorter, so a swipe settles quickly on the next project.
+        snap: { snapTo: "labelsDirectional", duration: stacked ? { min: .45, max: .85 } : { min: 1, max: 1.2 }, delay: stacked ? .06 : .02, ease: "sine.inOut", inertia: false,
           onStart: () => lenis?.stop(), onComplete: resync, onInterrupt: resync },
         onRefresh: self => {
           cancelAnimationFrame(refreshFrame);
@@ -242,12 +249,21 @@
         .set(leaver, { zIndex: 1 }, at + .1).set(riser, { zIndex: 2 }, at + .1)
         .set(from, { zIndex: 3 }, at + .1).set(to, { zIndex: 4 }, at + .1)
         .to(leaver, { scale: .9, autoAlpha: 0, duration: travel, ease }, t)
-        .fromTo(from, { x: right }, { x: 0, duration: travel, ease, immediateRender: false }, t)
         .to($("img", from), { scale: 1.3, duration: travel, ease }, t)
-        .fromTo(to, { x: right, clipPath: HIDDEN }, { x: 0, clipPath: SHOWN, duration: travel, ease }, t)
-        .fromTo(riser, { x: right, yPercent: 108 }, { x: right, yPercent: 0, duration: travel, ease }, t)
         .fromTo($("img", riser), { scale: 1.5 }, { scale: 1, duration: travel, ease }, t)
         .set(from, { autoAlpha: 0 }, t + travel + .02);
+      if (stacked) {
+        // The same move turned on its side: the old image travels down into the details slot
+        // (growing to its height) while the next details wipe in over it, and the next image
+        // comes in from the right into the image slot.
+        timeline.fromTo(from, { y: 0, height: imageHeight }, { y: drop, height: detailsHeight, duration: travel, ease, immediateRender: false }, t)
+          .fromTo(to, { y: () => -drop(), clipPath: HIDDEN }, { y: 0, clipPath: SHOWN, duration: travel, ease }, t)
+          .fromTo(riser, { xPercent: 108 }, { xPercent: 0, duration: travel, ease }, t);
+      } else {
+        timeline.fromTo(from, { x: right }, { x: 0, duration: travel, ease, immediateRender: false }, t)
+          .fromTo(to, { x: right, clipPath: HIDDEN }, { x: 0, clipPath: SHOWN, duration: travel, ease }, t)
+          .fromTo(riser, { x: right, yPercent: 108 }, { x: right, yPercent: 0, duration: travel, ease }, t);
+      }
       timeline.addLabel("project-" + i, i * step + .4);
     });
     // The last project simply scrolls away into the completed-buildings list.
@@ -256,7 +272,7 @@
     update(0);
     return () => {
       cancelAnimationFrame(refreshFrame);
-      stage.classList.remove("is-enhanced");
+      stage.classList.remove("is-enhanced", "is-stacked");
       portal.remove();
       deck.inert = false;
       setActive(0, false);
@@ -264,15 +280,14 @@
   }
   function playEntry() {
     if (motion.matches || scrollY > 80 || location.hash) return releaseEntry();
-    // Phone visitors can use the page immediately; media never gates interaction.
-    // Keep a brief brand dissolve without the desktop's blocking cinematic intro.
-    if (matchMedia("(max-width: 999px), (pointer: coarse)").matches) {
-      return releaseEntry();
-    }
+    // Phones and tablets play the same intro as desktop. Their capsule is drawn for an upright
+    // screen, and they wait less for the video so a slow connection does not hold the page back.
+    const small = matchMedia("(max-width: 999px)").matches;
+    const capsule = small && innerHeight > innerWidth ? "inset(37% 27% 37% 27% round 9999px)" : "inset(35% 39% 35% 39% round 9999px)";
     document.body.classList.add("is-loading");
     $("main").inert = true; $(".header").inert = true;
     lenis?.stop();
-    gsap.set(".hero__media", { clipPath: "inset(35% 39% 35% 39% round 9999px)" });
+    gsap.set(".hero__media", { clipPath: capsule });
     gsap.set(".hero__title .line > span", { yPercent: 115 });
     gsap.set(".hero__bottom", { opacity: 0, y: 16 });
     gsap.set(".header", { opacity: 0 });
@@ -314,7 +329,7 @@
           transformOrigin: "0 0", duration: 1.65, ease: "power3.inOut" }, "<")
         // Keep semicircular ends throughout. Grow beyond the viewport so the
         // capsule fills the hero before its mask is cleared, without squaring off.
-        .fromTo(".hero__media", { clipPath: "inset(35% 39% 35% 39% round 9999px)" },
+        .fromTo(".hero__media", { clipPath: capsule },
           { clipPath: "inset(-50% -50% -50% -50% round 9999px)", duration: 1.65, ease: "power3.inOut", immediateRender: false }, "<") // starts with the logo's flight
         .to(".hero__title .line > span", { yPercent: 0, duration: 1.15, stagger: .12, ease: "power3.out" }, "-=.75")
         .to(".hero__bottom", { opacity: 1, y: 0, duration: .8 }, "-=.8")
@@ -329,7 +344,7 @@
       else {
         const done = () => { video.removeEventListener("loadeddata", done); video.removeEventListener("error", done); resolve(); };
         video.addEventListener("loadeddata", done); video.addEventListener("error", done);
-        setTimeout(done, 3000);
+        setTimeout(done, small ? 1200 : 3000);
       }
     });
     [imageReady, fontReady, videoReady].forEach(p => p.then(() => {
@@ -337,7 +352,7 @@
       readyCount++;
       gsap.to(progress, { value: readyCount / 3 * 90, duration: .4, onUpdate: paint, overwrite: true });
     }));
-    Promise.race([Promise.all([imageReady, fontReady, videoReady]), new Promise(r => setTimeout(r, 3300))]).then(() => {
+    Promise.race([Promise.all([imageReady, fontReady, videoReady]), new Promise(r => setTimeout(r, small ? 1800 : 3300))]).then(() => {
       gsap.delayedCall(.45, start);
     });
     // Fail open even if a media request or an animation is interrupted.
